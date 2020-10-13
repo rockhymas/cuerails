@@ -1,9 +1,12 @@
-import consumer from "./consumer"
+import { Controller } from 'stimulus'; 
+import consumer from "channels/consumer"
 
-document.addEventListener("turbolinks:load", function() {
-  document.querySelectorAll('[data-channel-subscribe="list"]').forEach(function(element) {
+export default class extends Controller {
+  connect() {
+    console.log("hello from StimulusJS")
+    var element = this.element;
     var list_id = element.dataset.listId,
-        todoTemplate = document.querySelector('[data-role="todo-template"]');
+    todoTemplate = document.querySelector('[data-role="todo-template"]');
 
     // $element.animate({ scrollTop: $element.prop("scrollHeight")}, 1000)        
 
@@ -21,5 +24,6 @@ document.addEventListener("turbolinks:load", function() {
         }
       }
     );
-  });
-});
+
+  }
+}

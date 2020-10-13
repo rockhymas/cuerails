@@ -4,7 +4,7 @@
   <%= @list.name %>
 </h1>
 
-<div data-channel-subscribe="list" data-list-id="<%= @list.id %>">
+<div data-controller="list" data-list-id="<%= @list.id %>">
   <% @list.todos.each do |todo| %>
     <div>
       <%= todo.title %>
