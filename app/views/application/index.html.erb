@@ -1,1 +1,15 @@
-Hello, World!
+<div>
+  <% List.all.each do |list| %>
+    <div>
+      <%= list.name %>
+    </div>
+  <% end %>
+</div>
+
+<div>
+  <% List.find(1).todos.each do |todo| %>
+    <div>
+      <%= todo.title %>
+    </div>
+  <% end %>
+</div>

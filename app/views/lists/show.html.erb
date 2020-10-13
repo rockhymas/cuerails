@@ -1,0 +1,21 @@
+<p id="notice"><%= notice %></p>
+
+<h1>
+  <%= @list.name %>
+</h1>
+
+<div data-channel-subscribe="list" data-list-id="<%= @list.id %>">
+  <% @list.todos.each do |todo| %>
+    <div>
+      <%= todo.title %>
+    </div>
+  <% end %>
+</div>
+
+<%= link_to 'Edit', edit_list_path(@list) %> |
+<%= link_to 'Back', lists_path %>
+
+
+<div class="d-none" data-role="todo-template">
+  <div data-role="todo-title"></div>
+</div>
