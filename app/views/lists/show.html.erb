@@ -10,12 +10,10 @@
       <%= todo.title %>
     </div>
   <% end %>
+  <div data-target="list.template">
+    <div data-role="todo-title"></div>
+  </div>
 </div>
 
 <%= link_to 'Edit', edit_list_path(@list) %> |
 <%= link_to 'Back', lists_path %>
-
-
-<div class="d-none" data-role="todo-template">
-  <div data-role="todo-title"></div>
-</div>
