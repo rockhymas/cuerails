@@ -6,9 +6,7 @@
 
 <div data-controller="list" data-list-id="<%= @list.id %>">
   <% @list.todos.each do |todo| %>
-    <div>
-      <%= todo.title %>
-    </div>
+    <%= render partial: 'todos/entry', locals: { todo: todo } %>
   <% end %>
   <div data-target="list.template">
     <div data-role="todo-title"></div>
