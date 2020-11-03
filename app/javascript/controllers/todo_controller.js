@@ -50,9 +50,10 @@ export default class extends ApplicationController {
   // Assuming you create a "Example#dance" action in your Reflex class
   // you'll be able to use the following lifecycle methods:
 
-  // beforeDance(element, reflex, noop, reflexId) {
-  //  element.innerText = 'Putting dance shoes on...'
-  // }
+  beforeComplete(element, reflex, noop, reflexId) {
+   console.log(element)
+   element.checked = !element.checked
+  }
 
   // danceSuccess(element, reflex, noop, reflexId) {
   //   element.innerText = 'Danced like no one was watching! Was someone watching?'
