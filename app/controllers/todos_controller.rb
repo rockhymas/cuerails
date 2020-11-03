@@ -25,9 +25,6 @@ class TodosController < ApplicationController
   # POST /todos.json
   def create
     @todo = Todo.new(todo_params)
-    # list = List.find(@todo.list_id)
-
-    ListChannel.broadcast_to @todo.list, @todo
 
     respond_to do |format|
       if @todo.save
