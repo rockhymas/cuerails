@@ -1,4 +1,4 @@
 <div id="todo-row-<%= todo.id %>">
-  <%= check_box_tag "todo-#{todo.id}", '', todo.complete, data: { reflex: 'click->List#complete', id: todo.id, "reflex-root": "#todo-row-#{todo.id}" } %>
-  <%= todo.title %>
+  <%= check_box_tag "todo-#{todo.id}", '', todo.complete, data: { reflex: 'click->List#complete', id: todo.id } %>
+  <%= text_field_tag "todo-title-#{todo.id}", todo.title, data: { reflex: 'change->List#rename', id: todo.id } %>
 </div>

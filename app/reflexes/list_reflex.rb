@@ -36,4 +36,13 @@ class ListReflex < ApplicationReflex
     cable_ready.broadcast_to(todo.list)
   end
 
+  def rename
+    morph :nothing
+    todo = Todo.find(element.dataset[:id])
+    todo.title = element.value
+    todo.save
+
+    cable_ready[ListChannel].set_attribute(selector: "#todo-title-#{todo.id}", name: "value", value: todo.title)
+    cable_ready.broadcast_to(todo.list)
+  end
 end
