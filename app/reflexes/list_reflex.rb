@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-class TodoReflex < ApplicationReflex
+class ListReflex < ApplicationReflex
+  include CableReady::Broadcaster
+
   # Add Reflex methods in this file.
   #
   # All Reflex instances expose the following properties:
@@ -23,11 +25,15 @@ class TodoReflex < ApplicationReflex
   # Learn more at: https://docs.stimulusreflex.com
 
   def complete
-    puts 'toggling complete'
-    puts params
+    morph :nothing
     todo = Todo.find(element.dataset[:id])
     todo.toggle! :complete
-    puts 'toggled: ' + todo.complete.to_s
+    if todo.complete
+      cable_ready[ListChannel].set_attribute(selector: "#todo-#{todo.id}", name: "checked", value: "true")
+    else
+      cable_ready[ListChannel].remove_attribute(selector: "#todo-#{todo.id}", name: "checked")
+    end
+    cable_ready.broadcast_to(todo.list)
   end
 
 end

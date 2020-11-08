@@ -1,4 +1,6 @@
 import ApplicationController from './application_controller'
+import consumer from '../channels/consumer'
+import CableReady from 'cable_ready'
 
 /* This is the custom StimulusReflex controller for the Example Reflex.
  * Learn more at: https://docs.stimulusreflex.com
@@ -19,6 +21,17 @@ export default class extends ApplicationController {
   connect () {
     super.connect()
     // add your code here, if applicable
+    consumer.subscriptions.create(
+      {
+        channel: 'ListChannel',
+        list: this.element.dataset.listId
+      },
+      {
+        received (data) {
+          if (data.cableReady) CableReady.perform(data.operations)
+        }
+      }
+    )
   }
 
   /* Reflex specific lifecycle methods.
@@ -51,7 +64,6 @@ export default class extends ApplicationController {
   // you'll be able to use the following lifecycle methods:
 
   beforeComplete(element, reflex, noop, reflexId) {
-   console.log(element)
    element.checked = !element.checked
   }
 
