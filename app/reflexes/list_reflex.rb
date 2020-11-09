@@ -42,7 +42,7 @@ class ListReflex < ApplicationReflex
     todo.title = element.value
     todo.save
 
-    cable_ready[ListChannel].set_attribute(selector: "#todo-title-#{todo.id}", name: "value", value: todo.title)
+    cable_ready[ListChannel].set_value(selector: "#todo-title-#{todo.id}", value: todo.title)
     cable_ready.broadcast_to(todo.list)
   end
 end
