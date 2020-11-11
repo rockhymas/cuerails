@@ -6,6 +6,8 @@ import CableReady from 'cable_ready'
  * Learn more at: https://docs.stimulusreflex.com
  */
 export default class extends ApplicationController {
+  static targets = [ "checkbox", 'title' ]
+
   /*
    * Regular Stimulus lifecycle methods
    * Learn more at: https://stimulusjs.org/reference/lifecycle-callbacks
@@ -21,10 +23,10 @@ export default class extends ApplicationController {
   connect () {
     super.connect()
     // add your code here, if applicable
-    consumer.subscriptions.create(
+    this.subscription = consumer.subscriptions.create(
       {
-        channel: 'ListChannel',
-        list: this.element.dataset.listId
+        channel: 'TodoChannel',
+        id: this.element.dataset.todoId
       },
       {
         received (data) {
@@ -32,7 +34,44 @@ export default class extends ApplicationController {
         }
       }
     )
+
+    this.debouncedRename = this.debounce(() => {
+      this.stimulate('Todo#rename', this.titleTarget);
+    }, 1000);
   }
+
+  disconnect () {
+    super.disconnect();
+    this.subscription.unsubscribe();
+  }
+
+  complete(event) {
+    event.target.checked = !event.target.checked;
+    this.stimulate('Todo#complete', this.checkboxTarget);
+  }
+
+  rename() {
+    this.debouncedRename();
+  }
+
+  // Returns a function, that, as long as it continues to be invoked, will not
+  // be triggered. The function will be called after it stops being called for
+  // N milliseconds. If `immediate` is passed, trigger the function on the
+  // leading edge, instead of the trailing.
+  debounce(func, wait, immediate) {
+    var timeout;
+    return function() {
+      var context = this, args = arguments;
+      var later = function() {
+        timeout = null;
+        if (!immediate) func.apply(context, args);
+      };
+      var callNow = immediate && !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+      if (callNow) func.apply(context, args);
+    };
+  };
 
   /* Reflex specific lifecycle methods.
    *

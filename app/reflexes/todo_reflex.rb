@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ListReflex < ApplicationReflex
+class TodoReflex < ApplicationReflex
   include CableReady::Broadcaster
 
   # Add Reflex methods in this file.
@@ -26,23 +26,23 @@ class ListReflex < ApplicationReflex
 
   def complete
     morph :nothing
-    todo = Todo.find(element.dataset[:id])
+    todo = Todo.find(element.dataset["todo-id"])
     todo.toggle! :complete
     if todo.complete
-      cable_ready[ListChannel].set_attribute(selector: "#todo-#{todo.id}", name: "checked", value: "true")
+      cable_ready[TodoChannel].set_attribute(selector: "#todo-#{todo.id}", name: "checked", value: "true")
     else
-      cable_ready[ListChannel].remove_attribute(selector: "#todo-#{todo.id}", name: "checked")
+      cable_ready[TodoChannel].remove_attribute(selector: "#todo-#{todo.id}", name: "checked")
     end
-    cable_ready.broadcast_to(todo.list)
+    cable_ready.broadcast_to(todo)
   end
 
   def rename
     morph :nothing
-    todo = Todo.find(element.dataset[:id])
+    todo = Todo.find(element.dataset["todo-id"])
     todo.title = element.value
     todo.save
 
-    cable_ready[ListChannel].set_value(selector: "#todo-title-#{todo.id}", value: todo.title)
-    cable_ready.broadcast_to(todo.list)
+    cable_ready[TodoChannel].set_value(selector: "#todo-title-#{todo.id}", value: todo.title)
+    cable_ready.broadcast_to(todo)
   end
 end
