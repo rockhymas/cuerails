@@ -40,10 +40,6 @@ class TodosController < ApplicationController
   # PATCH/PUT /todos/1
   # PATCH/PUT /todos/1.json
   def update
-    if (params[:todo][:position].present?)
-      previous_position = @todo.position
-      @todo.insert_at(params[:todo][:position])
-    end
     @todo.update(todo_params)
   end
 

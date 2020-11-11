@@ -4,7 +4,7 @@
   <%= @list.name %>
 </h1>
 
-<div data-controller="sortable" data-sortable-animation="150" data-sortable-handle=".handle" data-sortable-resource-name="todo">
+<div data-controller="list" data-list-animation="150" data-list-handle=".handle" data-list-resource-name="todo">
   <% @list.todos.each do |todo| %>
     <%= render partial: 'todos/entry', locals: { todo: todo } %>
   <% end %>

@@ -27,6 +27,12 @@ class TodoReflex < ApplicationReflex
     cable_ready.broadcast_to(todo)
   end
 
+  def reposition(new_index)
+    todo = Todo.find(element.dataset["todo-id"])
+    todo.position = new_index
+    todo.save
+  end
+
   # Add Reflex methods in this file.
   #
   # All Reflex instances expose the following properties:
