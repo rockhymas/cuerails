@@ -867,6 +867,11 @@
   resolved "https://registry.yarnpkg.com/@rails/ujs/-/ujs-6.0.3.tgz#e68a03278e30daea6a110aac5dfa33c60c53055d"
   integrity sha512-CM9OEvoN9eXkaX7PXEnbsQLULJ97b9rVmwliZbz/iBOERLJ68Rk3ClJe+fQEMKU4CBZfky2lIRnfslOdUs9SLQ==
 
+"@rails/ujs@^6.0.3-4":
+  version "6.0.3-4"
+  resolved "https://registry.yarnpkg.com/@rails/ujs/-/ujs-6.0.3-4.tgz#8dafc84178080f9c4f21076953ea1d0dc0bfe0fc"
+  integrity sha512-pNEEndJYNMCYEZG79MkoMc40AYKBfm0md8pawJ/SUu/1aIhToJcKu+9hHT/7WMLudsakOgC/C8KKFuZOs4QTgw==
+
 "@rails/webpacker@4.3.0":
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/@rails/webpacker/-/webpacker-4.3.0.tgz#3793b3aed08ed0b661f1bed9de0739abacb6a834"
@@ -6635,6 +6640,11 @@ sort-keys@^1.0.0:
   dependencies:
     is-plain-obj "^1.0.0"
 
+sortablejs@^1.12.0:
+  version "1.12.0"
+  resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.12.0.tgz#ee6d7ece3598c2af0feb1559d98595e5ea37cbd6"
+  integrity sha512-bPn57rCjBRlt2sC24RBsu40wZsmLkSo2XeqG8k6DC1zru5eObQUIPPZAQG7W2SJ8FZQYq+BEJmvuw1Zxb3chqg==
+
 source-list-map@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/source-list-map/-/source-list-map-2.0.1.tgz#3993bd873bfc48479cca9ea3a547835c7c154b34"
@@ -6808,6 +6818,15 @@ stdout-stream@^1.4.0:
   integrity sha512-j4emi03KXqJWcIeF8eIXkjMFN1Cmb8gUlDYGeBALLPo5qdyTfA9bOtl8m33lRoC+vFMkP3gl0WsDr6+gzxbbTA==
   dependencies:
     readable-stream "^2.0.1"
+
+stimulus-sortable@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/stimulus-sortable/-/stimulus-sortable-1.1.0.tgz#def10e34e09ed4d74dc8ce31b3f2454ac19b8011"
+  integrity sha512-GA1Dj/59CTcEbqMHddO2qBPzHx1voxRuKJvI2jNmQeK1tTBv/rKLzacj7jCif07gtIjiqxVVqyXP/mqIW/JHzQ==
+  dependencies:
+    "@rails/ujs" "^6.0.3-4"
+    sortablejs "^1.12.0"
+    stimulus "^1.1.1"
 
 "stimulus@>= 1.1", stimulus@^1.1.1:
   version "1.1.1"

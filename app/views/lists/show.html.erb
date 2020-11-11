@@ -4,13 +4,10 @@
   <%= @list.name %>
 </h1>
 
-<div>
+<div data-controller="sortable" data-sortable-animation="150" data-sortable-handle=".handle" data-sortable-resource-name="todo">
   <% @list.todos.each do |todo| %>
     <%= render partial: 'todos/entry', locals: { todo: todo } %>
   <% end %>
-  <div data-target="list.template">
-    <div data-role="todo-title"></div>
-  </div>
 </div>
 
 <%= link_to 'Edit', edit_list_path(@list) %> |

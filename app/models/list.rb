@@ -1,5 +1,5 @@
 class List < ApplicationRecord
-  has_many :todos, -> { order("id") }
+  has_many :todos, -> { order(position: :asc) }
 
   def name
     if date == nil
