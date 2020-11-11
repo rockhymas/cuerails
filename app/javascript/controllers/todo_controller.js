@@ -6,7 +6,7 @@ import CableReady from 'cable_ready'
  * Learn more at: https://docs.stimulusreflex.com
  */
 export default class extends ApplicationController {
-  static targets = [ "checkbox", 'title' ]
+  static targets = [ "checkbox", 'title', 'delete' ]
 
   /*
    * Regular Stimulus lifecycle methods
@@ -52,6 +52,10 @@ export default class extends ApplicationController {
 
   rename() {
     this.debouncedRename();
+  }
+
+  delete() {
+    this.stimulate('Todo#delete', this.deleteTarget);
   }
 
   // Returns a function, that, as long as it continues to be invoked, will not

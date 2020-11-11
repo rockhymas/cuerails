@@ -2,6 +2,30 @@
 
 class TodoReflex < ApplicationReflex
   include CableReady::Broadcaster
+  delegate :render, to: ApplicationController
+
+  def complete
+    todo = Todo.find(element.dataset["todo-id"])
+    todo.toggle! :complete
+
+    morph "#todo-row-#{todo.id}", render(partial: "todos/entry", locals: { todo: todo })
+  end
+
+  def rename
+    todo = Todo.find(element.dataset["todo-id"])
+    todo.title = element.value
+    todo.save
+
+    morph "#todo-row-#{todo.id}", render(partial: "todos/entry", locals: { todo: todo })
+  end
+
+  def delete
+    todo = Todo.find(element.dataset["todo-id"])
+    todo.delete
+    
+    cable_ready[TodoChannel].remove(selector: "#todo-row-#{todo.id}")
+    cable_ready.broadcast_to(todo)
+  end
 
   # Add Reflex methods in this file.
   #
@@ -23,26 +47,4 @@ class TodoReflex < ApplicationReflex
   #   end
   #
   # Learn more at: https://docs.stimulusreflex.com
-
-  def complete
-    morph :nothing
-    todo = Todo.find(element.dataset["todo-id"])
-    todo.toggle! :complete
-    if todo.complete
-      cable_ready[TodoChannel].set_attribute(selector: "#todo-#{todo.id}", name: "checked", value: "true")
-    else
-      cable_ready[TodoChannel].remove_attribute(selector: "#todo-#{todo.id}", name: "checked")
-    end
-    cable_ready.broadcast_to(todo)
-  end
-
-  def rename
-    morph :nothing
-    todo = Todo.find(element.dataset["todo-id"])
-    todo.title = element.value
-    todo.save
-
-    cable_ready[TodoChannel].set_value(selector: "#todo-title-#{todo.id}", value: todo.title)
-    cable_ready.broadcast_to(todo)
-  end
 end
