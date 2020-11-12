@@ -58,6 +58,12 @@ export default class extends ApplicationController {
     this.stimulate('Todo#delete', this.deleteTarget);
   }
 
+  keypress(e) {
+    if (e.key === 'Enter') {
+      this.stimulate('Todo#insertAfter', this.element);
+    }
+  }
+
   // Returns a function, that, as long as it continues to be invoked, will not
   // be triggered. The function will be called after it stops being called for
   // N milliseconds. If `immediate` is passed, trigger the function on the
