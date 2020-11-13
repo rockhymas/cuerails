@@ -182,8 +182,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    stimulus_reflex (3.3.0)
-      cable_ready (>= 4.3.0)
+    stimulus_reflex (3.4.0.pre3)
       nokogiri
       rack
       rails (>= 5.2)
@@ -225,6 +224,7 @@ DEPENDENCIES
   acts_as_list
   bootsnap (>= 1.4.2)
   byebug
+  cable_ready (~> 4.3.0)
   capybara (>= 2.15)
   devise
   jbuilder (~> 2.7)
@@ -237,7 +237,7 @@ DEPENDENCIES
   selenium-webdriver
   spring
   spring-watcher-listen (~> 2.0.0)
-  stimulus_reflex (~> 3.3)
+  stimulus_reflex (~> 3.4.0.pre3)
   turbolinks (~> 5)
   tzinfo-data
   web-console (>= 3.3.0)

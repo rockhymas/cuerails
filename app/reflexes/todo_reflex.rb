@@ -8,9 +8,7 @@ class TodoReflex < ApplicationReflex
     todo = Todo.find(element.dataset["todo-id"])
     todo.toggle! :complete
 
-    morph :nothing
-    cable_ready[TodoChannel].morph(selector: "#todo-row-#{todo.id}", html: render(partial: "todos/entry", locals: { todo: todo }))
-    cable_ready.broadcast_to(todo)
+    morph "#todo-row-#{todo.id}", render(partial: "todos/entry", locals: { todo: todo })
   end
 
   def rename
@@ -18,7 +16,6 @@ class TodoReflex < ApplicationReflex
     todo.title = element.value
     todo.save
 
-    # using cable_ready breaks focus, but morph by itself causes js errors in non-originating tabs
     morph "#todo-row-#{todo.id}", render(partial: "todos/entry", locals: { todo: todo })
   end
 
@@ -26,6 +23,7 @@ class TodoReflex < ApplicationReflex
     todo = Todo.find(element.dataset["todo-id"])
     todo.delete
     
+    morph :nothing
     cable_ready[TodoChannel].remove(selector: "#todo-row-#{todo.id}")
     cable_ready.broadcast_to(todo)
   end
@@ -42,6 +40,8 @@ class TodoReflex < ApplicationReflex
     new_todo = Todo.create(list: todo.list)
     new_todo.insert_at(position)
     new_todo.save
+
+    morph :nothing
   end
 
   # Add Reflex methods in this file.
