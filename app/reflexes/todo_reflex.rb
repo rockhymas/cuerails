@@ -21,16 +21,17 @@ class TodoReflex < ApplicationReflex
 
   def delete
     todo = Todo.find(element.dataset["todo-id"])
-    todo.delete
+    todo.destroy
     
     morph :nothing
-    cable_ready[TodoChannel].remove(selector: "#todo-row-#{todo.id}")
-    cable_ready.broadcast_to(todo)
+    # cable_ready[TodoChannel].remove(selector: "#todo-row-#{todo.id}")
+    # cable_ready.broadcast_to(todo)
   end
 
   def reposition(new_index)
     todo = Todo.find(element.dataset["todo-id"])
     todo.position = new_index
+    puts new_index
     todo.save
   end
 
@@ -40,8 +41,6 @@ class TodoReflex < ApplicationReflex
     new_todo = Todo.create(list: todo.list)
     new_todo.insert_at(position)
     new_todo.save
-
-    morph :nothing
   end
 
   # Add Reflex methods in this file.

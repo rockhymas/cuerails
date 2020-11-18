@@ -58,9 +58,46 @@ export default class extends ApplicationController {
     this.stimulate('Todo#delete', this.deleteTarget);
   }
 
+  afterDelete(element, reflex, noop, reflexId) {
+    const row = element.closest("[data-todo-id]");
+    row.remove();
+  }
+
   keypress(e) {
     if (e.key === 'Enter') {
+      this.inserting = true;
       this.stimulate('Todo#insertAfter', this.element);
+    }
+  }
+
+  keydown(e) {
+    if (e.key === 'ArrowDown') {
+      this.focusNextTodo(e.target);
+    }
+    if (e.key === 'ArrowUp') {
+      this.focusPrevTodo(e.target);
+    }
+  }
+
+  afterInsertAfter(element, reflex, noop, reflexId) {
+    if (this.inserting) {
+      this.focusNextTodo(element);
+    }
+
+    this.inserting = false;
+  }
+
+  focusNextTodo(element) {
+    const row = element.closest("[data-todo-id]");
+    if (row.nextElementSibling) {
+      row.nextElementSibling.querySelector("input[type='text']").focus();
+    }
+  }
+
+  focusPrevTodo(element) {
+    const row = element.closest("[data-todo-id]");
+    if (row.previousElementSibling) {
+      row.previousElementSibling.querySelector("input[type='text']").focus();
     }
   }
 

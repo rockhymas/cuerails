@@ -1,6 +1,6 @@
 <div id="todo-row-<%= todo.id %>" data-controller="todo" data-todo-id="<%= todo.id%>" >
   <%= check_box_tag "todo-#{todo.id}", '', todo.complete, data: { target: 'todo.checkbox', action: 'change->todo#complete', "reflex-dataset": "combined" } %>
-  <%= text_field_tag "todo-title-#{todo.id}", todo.title, data: { target: 'todo.title', action: 'input->todo#rename keypress->todo#keypress', "reflex-dataset": "combined" } %>
+  <%= text_field_tag "todo-title-#{todo.id}", todo.title, data: { target: 'todo.title', action: 'input->todo#rename keypress->todo#keypress keydown->todo#keydown', "reflex-dataset": "combined" } %>
   <%= button_tag "Delete", id: "todo-delete-#{todo.id}", data: { target: 'todo.delete', action: 'click->todo#delete', "reflex-dataset": "combined" } %>
   <span class="handle">handle: <%= todo.position %></span>
 </div>
