@@ -56,6 +56,7 @@ export default class extends ApplicationController {
 
   delete() {
     this.stimulate('Todo#delete', this.deleteTarget);
+    this.element.style.display = 'none';
   }
 
   afterDelete(element, reflex, noop, reflexId) {
@@ -65,6 +66,7 @@ export default class extends ApplicationController {
 
   keypress(e) {
     if (e.key === 'Enter') {
+      e.preventDefault();
       this.inserting = true;
       this.stimulate('Todo#insertAfter', this.element);
     }
@@ -72,10 +74,22 @@ export default class extends ApplicationController {
 
   keydown(e) {
     if (e.key === 'ArrowDown') {
+      e.preventDefault();
       this.focusNextTodo(e.target);
     }
     if (e.key === 'ArrowUp') {
+      e.preventDefault();
       this.focusPrevTodo(e.target);
+    }
+    if (e.key === 'Delete' && this.titleTarget.value === '') {
+      e.preventDefault();
+      this.focusNextTodo(e.target);
+      this.delete();
+    }
+    if (e.key === 'Backspace' && this.titleTarget.value === '') {
+      e.preventDefault();
+      this.focusPrevTodo(e.target, true);
+      this.delete();
     }
   }
 
@@ -94,10 +108,14 @@ export default class extends ApplicationController {
     }
   }
 
-  focusPrevTodo(element) {
+  focusPrevTodo(element, cursorAtEnd) {
     const row = element.closest("[data-todo-id]");
     if (row.previousElementSibling) {
-      row.previousElementSibling.querySelector("input[type='text']").focus();
+      const input = row.previousElementSibling.querySelector("input[type='text']")
+      input.focus();
+      if (cursorAtEnd) {
+        input.setSelectionRange(input.value.length, input.value.length);
+      }
     }
   }
 
