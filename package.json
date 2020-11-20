@@ -7,9 +7,10 @@
     "@rails/ujs": "^6.0.0",
     "@rails/webpacker": "4.3.0",
     "cable_ready": "^4.3.0",
+    "lodash": "^4.17.20",
     "stimulus": "^1.1.1",
     "stimulus-sortable": "^1.1.0",
-    "stimulus_reflex": "leastbad/stimulus_reflex#nothing_reflex",
+    "stimulus_reflex": "3.4.0-pre4",
     "turbolinks": "^5.2.0"
   },
   "version": "0.1.0",

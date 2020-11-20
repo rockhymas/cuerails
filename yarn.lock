@@ -4283,7 +4283,7 @@ lodash.uniq@^4.5.0:
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
   integrity sha1-0CJTc662Uq3BvILklFM5qEJ1R3M=
 
-lodash@^4.0.0, lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.5, lodash@~4.17.10:
+lodash@^4.0.0, lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.20, lodash@^4.17.5, lodash@~4.17.10:
   version "4.17.20"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
   integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
@@ -6831,9 +6831,10 @@ stimulus@^1.1.1:
     "@stimulus/core" "^1.1.1"
     "@stimulus/webpack-helpers" "^1.1.1"
 
-stimulus_reflex@leastbad/stimulus_reflex#nothing_reflex:
-  version "3.4.0-pre3"
-  resolved "https://codeload.github.com/leastbad/stimulus_reflex/tar.gz/2608f22019394622242f71c7facad356232be6a0"
+stimulus_reflex@3.4.0-pre4:
+  version "3.4.0-pre4"
+  resolved "https://registry.yarnpkg.com/stimulus_reflex/-/stimulus_reflex-3.4.0-pre4.tgz#88d4ed21d7cf611befec05db8963becd6bfe3496"
+  integrity sha512-FJXh2hp4GXb3X5H8abEfci8xde6QwsGUOFlY2303Tsn1Hj2K7rFyRXE/j7uzuTkz65zLaSV7DLEUCDtcDLGvgA==
   dependencies:
     "@rails/actioncable" ">= 6.0"
     cable_ready ">= 4.3.0"
