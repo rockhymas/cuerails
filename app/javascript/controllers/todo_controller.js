@@ -1,6 +1,7 @@
 import ApplicationController from './application_controller'
 import consumer from '../channels/consumer'
 import CableReady from 'cable_ready'
+import debounce from 'lodash/debounce'
 
 /* This is the custom StimulusReflex controller for the Example Reflex.
  * Learn more at: https://docs.stimulusreflex.com
@@ -35,7 +36,7 @@ export default class extends ApplicationController {
       }
     )
 
-    this.debouncedRename = this.debounce(() => {
+    this.debouncedRename = debounce(() => {
       this.stimulate('Todo#rename', this.titleTarget);
     }, 1000);
   }
@@ -55,6 +56,7 @@ export default class extends ApplicationController {
   }
 
   delete() {
+    this.debouncedRename.flush();
     this.stimulate('Todo#delete', this.deleteTarget);
     this.element.style.display = 'none';
   }
@@ -125,17 +127,30 @@ export default class extends ApplicationController {
   // leading edge, instead of the trailing.
   debounce(func, wait, immediate) {
     var timeout;
-    return function() {
+
+    const flush = function() {
+      if (timeout === null) {
+        return;
+      }
+      clearTimeout(timeout);
+      func.apply(context, args);
+    };
+
+    function debounced() {
       var context = this, args = arguments;
       var later = function() {
         timeout = null;
         if (!immediate) func.apply(context, args);
       };
       var callNow = immediate && !timeout;
+
       clearTimeout(timeout);
       timeout = setTimeout(later, wait);
       if (callNow) func.apply(context, args);
     };
+
+    debounced.flush = flush;
+    return debounced;
   };
 
   /* Reflex specific lifecycle methods.
