@@ -37,6 +37,7 @@ export default class extends ApplicationController {
     )
 
     this.debouncedRename = debounce(() => {
+      this.renaming = true;
       this.stimulate('Todo#rename', this.titleTarget);
     }, 1000);
   }
@@ -51,8 +52,41 @@ export default class extends ApplicationController {
     this.stimulate('Todo#complete', this.checkboxTarget);
   }
 
+  togglePin(event) {
+    event.target.checked = !event.target.checked;
+    this.stimulate('Todo#togglePin', this.checkboxTarget);
+  }
+
   rename() {
+    if (this.titleTarget.dataset.pendingRename) {
+      delete this.titleTarget.dataset.pendingRename;
+      this.titleTarget.classList.remove('pendingRename');
+    }
     this.debouncedRename();
+  }
+
+  afterRename() {
+    if (this.titleTarget === document.activeElement && !this.renaming) {
+      if (!document.hasFocus()) {
+        this.titleTarget.blur();
+        this.stimulate('Todo#forceUpdate');
+      } else {
+        this.titleTarget.dataset.pendingRename = this.titleTarget.value;
+        this.titleTarget.classList.add('pendingRename');
+      }
+    }
+
+    this.renaming = false;
+  }
+
+  blur() {
+    this.debouncedRename.flush();
+    if (this.titleTarget.dataset.pendingRename &&
+        this.titleTarget.dataset.pendingRename == this.titleTarget.value) {
+      delete this.titleTarget.dataset.pendingRename;
+      this.stimulate('Todo#forceUpdate');
+      this.titleTarget.classList.remove('pendingRename');
+    }
   }
 
   delete() {

@@ -11,6 +11,13 @@ class TodoReflex < ApplicationReflex
     morph "#todo-row-#{todo.id}", render(partial: "todos/entry", locals: { todo: todo })
   end
 
+  def togglePin
+    todo = Todo.find(element.dataset["todo-id"])
+    todo.toggle! :pinned
+
+    morph "#todo-row-#{todo.id}", render(partial: "todos/entry", locals: { todo: todo })
+  end
+
   def rename
     todo = Todo.find(element.dataset["todo-id"])
     todo.title = element.value
@@ -19,19 +26,21 @@ class TodoReflex < ApplicationReflex
     morph "#todo-row-#{todo.id}", render(partial: "todos/entry", locals: { todo: todo })
   end
 
+  def forceUpdate
+    todo = Todo.find(element.dataset["todo-id"])
+    morph "#todo-row-#{todo.id}", render(partial: "todos/entry", locals: { todo: todo })
+  end
+
   def delete
     todo = Todo.find(element.dataset["todo-id"])
     todo.destroy
     
     morph :nothing
-    # cable_ready[TodoChannel].remove(selector: "#todo-row-#{todo.id}")
-    # cable_ready.broadcast_to(todo)
   end
 
   def reposition(new_index)
     todo = Todo.find(element.dataset["todo-id"])
     todo.position = new_index
-    puts new_index
     todo.save
   end
 
