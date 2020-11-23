@@ -8,7 +8,7 @@ import debounce from 'lodash/debounce'
  * Learn more at: https://docs.stimulusreflex.com
  */
 export default class extends ApplicationController {
-  static targets = [ "checkbox", 'title', 'delete' ]
+  static targets = [ "checkbox", 'title', 'delete', 'handle', 'options' ]
 
   /*
    * Regular Stimulus lifecycle methods
@@ -93,13 +93,13 @@ export default class extends ApplicationController {
   delete() {
     this.debouncedRename.flush();
     this.stimulate('Todo#delete', this.deleteTarget);
-    Velocity(this.element, {opacity: 0}, {display: "none", complete: function(elements) {
+    Velocity(this.element, {opacity: 0}, {display: "none", complete: function() {
       this.element.remove();
     }.bind(this)});
   }
 
   afterDelete() {
-    Velocity(this.element, {opacity: 0}, {display: "none", complete: function(elements) {
+    Velocity(this.element, {opacity: 0}, {display: "none", complete: function() {
       this.element.remove();
     }.bind(this)});
   }
@@ -133,6 +133,14 @@ export default class extends ApplicationController {
     }
   }
 
+  clickHandle() {
+    if (this.optionsTarget.style.display === 'none') {
+      Velocity(this.optionsTarget, 'slideDown');
+    } else {
+      Velocity(this.optionsTarget, 'slideUp');
+    }
+  }
+
   afterInsertAfter(element) {
     if (this.inserting) {
       this.focusNextTodo(element);
@@ -142,19 +150,19 @@ export default class extends ApplicationController {
   }
 
   focusNextTodo(element) {
-    const row = element.closest("[data-todo-id]");
-    if (row.nextElementSibling) {
-      row.nextElementSibling.querySelector("input[type='text']").focus();
-      Velocity(row.nextElementSibling, {backgroundColor: '#2d842f'}).then(Velocity(row.nextElementSibling, {backgroundColor: '#FFF'}));
+    const row = this.element.nextElementSibling
+    if (row) {
+      row.querySelector("input[type='text']").focus();
+      Velocity(row, {backgroundColor: '#2d842f'}).then(Velocity(row, {backgroundColor: '#FFF'}));
     }
   }
 
   focusPrevTodo(element, cursorAtEnd) {
-    const row = element.closest("[data-todo-id]");
-    if (row.previousElementSibling) {
-      const input = row.previousElementSibling.querySelector("input[type='text']")
+    const row = this.element.previousElementSibling
+    if (row) {
+      const input = row.querySelector("input[type='text']")
       input.focus();
-      Velocity(row.previousElementSibling, {backgroundColor: '#2d842f'}).then(Velocity(row.previousElementSibling, {backgroundColor: '#FFF'}));
+      Velocity(row, {backgroundColor: '#2d842f'}).then(Velocity(row, {backgroundColor: '#FFF'}));
       if (cursorAtEnd) {
         input.setSelectionRange(input.value.length, input.value.length);
       }
