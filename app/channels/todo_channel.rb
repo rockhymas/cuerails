@@ -1,6 +1,6 @@
-class TodoChannel < ApplicationCable::Channel
+class ListChannel < ApplicationCable::Channel
   def subscribed
-    todo = Todo.find params[:id]
-    stream_for todo
+    list = List.find params[:id]
+    stream_for list
   end
 end

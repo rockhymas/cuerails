@@ -1,7 +1,5 @@
 import Velocity from 'velocity-animate'
 import ApplicationController from './application_controller'
-import consumer from '../channels/consumer'
-import CableReady from 'cable_ready'
 import debounce from 'lodash/debounce'
 
 /* This is the custom StimulusReflex controller for the Example Reflex.
@@ -24,28 +22,11 @@ export default class extends ApplicationController {
 
   connect () {
     super.connect()
-    // add your code here, if applicable
-    this.subscription = consumer.subscriptions.create(
-      {
-        channel: 'TodoChannel',
-        id: this.element.dataset.todoId
-      },
-      {
-        received (data) {
-          if (data.cableReady) CableReady.perform(data.operations)
-        }
-      }
-    )
 
     this.debouncedRename = debounce(() => {
       this.renaming = true;
       this.stimulate('Todo#rename', this.titleTarget);
     }, 1000);
-  }
-
-  disconnect () {
-    super.disconnect();
-    this.subscription.unsubscribe();
   }
 
   complete(event) {
@@ -93,9 +74,7 @@ export default class extends ApplicationController {
   delete() {
     this.debouncedRename.flush();
     this.stimulate('Todo#delete', this.deleteTarget);
-    Velocity(this.element, {opacity: 0}, {display: "none", complete: function() {
-      this.element.remove();
-    }.bind(this)});
+    Velocity(this.element, {opacity: 0}, {display: "none"});
   }
 
   afterDelete() {
