@@ -133,7 +133,7 @@ export default class extends ApplicationController {
     }
   }
 
-  afterInsertAfter(element, reflex, noop, reflexId) {
+  afterInsertAfter(element) {
     if (this.inserting) {
       this.focusNextTodo(element);
     }
@@ -145,6 +145,7 @@ export default class extends ApplicationController {
     const row = element.closest("[data-todo-id]");
     if (row.nextElementSibling) {
       row.nextElementSibling.querySelector("input[type='text']").focus();
+      Velocity(row.nextElementSibling, {backgroundColor: '#2d842f'}).then(Velocity(row.nextElementSibling, {backgroundColor: '#FFF'}));
     }
   }
 
@@ -153,43 +154,12 @@ export default class extends ApplicationController {
     if (row.previousElementSibling) {
       const input = row.previousElementSibling.querySelector("input[type='text']")
       input.focus();
+      Velocity(row.previousElementSibling, {backgroundColor: '#2d842f'}).then(Velocity(row.previousElementSibling, {backgroundColor: '#FFF'}));
       if (cursorAtEnd) {
         input.setSelectionRange(input.value.length, input.value.length);
       }
     }
   }
-
-  // Returns a function, that, as long as it continues to be invoked, will not
-  // be triggered. The function will be called after it stops being called for
-  // N milliseconds. If `immediate` is passed, trigger the function on the
-  // leading edge, instead of the trailing.
-  debounce(func, wait, immediate) {
-    var timeout;
-
-    const flush = function() {
-      if (timeout === null) {
-        return;
-      }
-      clearTimeout(timeout);
-      func.apply(context, args);
-    };
-
-    function debounced() {
-      var context = this, args = arguments;
-      var later = function() {
-        timeout = null;
-        if (!immediate) func.apply(context, args);
-      };
-      var callNow = immediate && !timeout;
-
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-      if (callNow) func.apply(context, args);
-    };
-
-    debounced.flush = flush;
-    return debounced;
-  };
 
   /* Reflex specific lifecycle methods.
    *
@@ -220,9 +190,8 @@ export default class extends ApplicationController {
   // Assuming you create a "Example#dance" action in your Reflex class
   // you'll be able to use the following lifecycle methods:
 
-  beforeComplete(element, reflex, noop, reflexId) {
-   element.checked = !element.checked
-  }
+  // beforeDance(element, reflex, noop, reflexId) {
+  // }
 
   // danceSuccess(element, reflex, noop, reflexId) {
   //   element.innerText = 'Danced like no one was watching! Was someone watching?'
