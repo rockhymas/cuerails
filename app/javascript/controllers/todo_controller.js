@@ -1,3 +1,4 @@
+import Velocity from 'velocity-animate'
 import ApplicationController from './application_controller'
 import consumer from '../channels/consumer'
 import CableReady from 'cable_ready'
@@ -92,12 +93,15 @@ export default class extends ApplicationController {
   delete() {
     this.debouncedRename.flush();
     this.stimulate('Todo#delete', this.deleteTarget);
-    this.element.style.display = 'none';
+    Velocity(this.element, {opacity: 0}, {display: "none", complete: function(elements) {
+      this.element.remove();
+    }.bind(this)});
   }
 
-  afterDelete(element, reflex, noop, reflexId) {
-    const row = element.closest("[data-todo-id]");
-    row.remove();
+  afterDelete() {
+    Velocity(this.element, {opacity: 0}, {display: "none", complete: function(elements) {
+      this.element.remove();
+    }.bind(this)});
   }
 
   keypress(e) {
