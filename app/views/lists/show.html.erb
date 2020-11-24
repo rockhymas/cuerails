@@ -1,10 +1,6 @@
-<p id="notice"><%= notice %></p>
-
-<h1>
-  <%= @list.name %>
-</h1>
-
 <div data-controller="list" data-list-animation="150" data-list-handle=".handle" data-list-resource-name="todo" data-list-id="<%= @list.id%>">
+  <%= content_tag :span, @list.name, id: "list-title-#{@list.id}", contenteditable: @list.date.blank?, data: { target: 'list.title', action: 'input->list#rename keypress->list#keypress keydown->list#keydown blur->list#blur paste->list#paste', "reflex-dataset": "combined" } %>
+
   <% @list.todos.each do |todo| %>
     <%= render partial: 'todos/entry', locals: { todo: todo } %>
   <% end %>
