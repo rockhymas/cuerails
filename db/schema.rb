@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_24_150920) do
+ActiveRecord::Schema.define(version: 2020_11_25_040300) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,10 +44,13 @@ ActiveRecord::Schema.define(version: 2020_11_24_150920) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "time_zone", default: "Pacific Time (US & Canada)"
+    t.bigint "plan_list_id"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["plan_list_id"], name: "index_users_on_plan_list_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "lists", "users"
   add_foreign_key "todos", "lists"
+  add_foreign_key "users", "lists", column: "plan_list_id"
 end

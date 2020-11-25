@@ -5,6 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   has_many :lists
+  belongs_to :plan_list, class_name: "List"
 
   def current_day_plan
     zone = ActiveSupport::TimeZone.new(time_zone)
