@@ -6,10 +6,6 @@
   <% end %>
 </div>
 
-<div>
-  <% List.find(1).todos.each do |todo| %>
-    <div>
-      <%= todo.title %>
-    </div>
-  <% end %>
-</div>
+<br>
+
+<%= render partial: 'lists/panel', locals: { list: current_user.current_day_plan } %>

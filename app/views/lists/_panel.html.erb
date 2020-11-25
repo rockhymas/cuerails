@@ -1,0 +1,18 @@
+<div data-controller="list"
+     data-list-animation="150"
+     data-list-handle=".handle"
+     data-list-resource-name="todo"
+     data-list-id="<%= list.id%>" >
+
+  <span id="list-title-<%=list.id%>"
+        contenteditable="<%=list.date.blank?%>"
+        data-target="list.title"
+        data-action="input->list#rename keypress->list#keypress keydown->list#keydown blur->list#blur paste->list#paste"
+        data-reflex-dataset="combined">
+    <%= list.name %>
+  </span>
+
+  <% list.todos.each do |todo| %>
+    <%= render partial: 'todos/entry', locals: { todo: todo } %>
+  <% end %>
+</div>

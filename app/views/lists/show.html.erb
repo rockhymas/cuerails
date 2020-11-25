@@ -1,10 +1,4 @@
-<div data-controller="list" data-list-animation="150" data-list-handle=".handle" data-list-resource-name="todo" data-list-id="<%= @list.id%>">
-  <%= content_tag :span, @list.name, id: "list-title-#{@list.id}", contenteditable: @list.date.blank?, data: { target: 'list.title', action: 'input->list#rename keypress->list#keypress keydown->list#keydown blur->list#blur paste->list#paste', "reflex-dataset": "combined" } %>
-
-  <% @list.todos.each do |todo| %>
-    <%= render partial: 'todos/entry', locals: { todo: todo } %>
-  <% end %>
-</div>
+<%= render partial: 'lists/panel', locals: { list: @list } %>
 
 <%= link_to 'Edit', edit_list_path(@list) %> |
 <%= link_to 'Back', lists_path %>
