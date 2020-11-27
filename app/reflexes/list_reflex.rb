@@ -6,11 +6,10 @@ class ListReflex < ApplicationReflex
 
   def rename
     list = List.find(element.dataset["list-id"])
-    puts element
     list.title = element.dataset["value"]
     list.save
 
-#    morph "#todo-row-#{todo.id}", render(partial: "todos/entry", locals: { todo: todo })
+    # morph "#todo-row-#{todo.id}", render(partial: "todos/entry", locals: { todo: todo })
   end
 
   def forceUpdate
