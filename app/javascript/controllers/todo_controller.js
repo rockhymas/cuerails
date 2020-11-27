@@ -6,7 +6,7 @@ import debounce from 'lodash/debounce'
  * Learn more at: https://docs.stimulusreflex.com
  */
 export default class extends ApplicationController {
-  static targets = [ "checkbox", 'title', 'delete', 'handle', 'options' ]
+  static targets = [ "checkbox", 'title', 'delete', 'handle', 'options', 'pinned' ]
 
   /*
    * Regular Stimulus lifecycle methods
@@ -30,13 +30,13 @@ export default class extends ApplicationController {
   }
 
   complete(event) {
-    event.target.checked = !event.target.checked;
+    this.checkboxTarget.checked = !this.checkboxTarget.checked;
     this.stimulate('Todo#complete', this.checkboxTarget);
   }
 
   togglePin(event) {
-    event.target.checked = !event.target.checked;
-    this.stimulate('Todo#togglePin', this.checkboxTarget);
+    this.pinnedTarget.checked = !this.pinnedTarget.checked;
+    this.stimulate('Todo#togglePin', this.pinnedTarget);
   }
 
   rename() {
@@ -94,20 +94,20 @@ export default class extends ApplicationController {
   keydown(e) {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      this.focusNextTodo(e.target);
+      this.focusNextTodo();
     }
     if (e.key === 'ArrowUp') {
       e.preventDefault();
-      this.focusPrevTodo(e.target);
+      this.focusPrevTodo();
     }
     if (e.key === 'Delete' && this.titleTarget.value === '') {
       e.preventDefault();
-      this.focusNextTodo(e.target);
+      this.focusNextTodo();
       this.delete();
     }
     if (e.key === 'Backspace' && this.titleTarget.value === '') {
       e.preventDefault();
-      this.focusPrevTodo(e.target, true);
+      this.focusPrevTodo(true);
       this.delete();
     }
   }
@@ -120,15 +120,15 @@ export default class extends ApplicationController {
     }
   }
 
-  afterInsertAfter(element) {
+  afterInsertAfter() {
     if (this.inserting) {
-      this.focusNextTodo(element);
+      this.focusNextTodo();
     }
 
     this.inserting = false;
   }
 
-  focusNextTodo(element) {
+  focusNextTodo() {
     const row = this.element.nextElementSibling
     if (row) {
       row.querySelector("input[type='text']").focus();
@@ -136,7 +136,7 @@ export default class extends ApplicationController {
     }
   }
 
-  focusPrevTodo(element, cursorAtEnd) {
+  focusPrevTodo(cursorAtEnd) {
     const row = this.element.previousElementSibling
     if (row) {
       const input = row.querySelector("input[type='text']")

@@ -83,8 +83,22 @@ export default class extends Sortable {
   keypress(e) {
     if (e.key === 'Enter') {
       e.preventDefault();
+      this.inserting = true;
+      this.stimulate('List#insertTodo', this.element);
       this.titleTarget.blur();
     }
+  }
+
+  afterInsertTodo(element) {
+    if (this.inserting) {
+      const row = this.titleTarget.nextElementSibling
+      if (row) {
+        row.querySelector("input[type='text']").focus();
+        Velocity(row, {backgroundColor: '#2d842f'}).then(Velocity(row, {backgroundColor: '#FFF'}));
+      }
+      }
+
+    this.inserting = false;
   }
 
   keydown(e) {

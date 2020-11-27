@@ -44,11 +44,10 @@ class TodoReflex < ApplicationReflex
     todo.save
   end
 
-  def insertAfter()
+  def insertAfter
     todo = Todo.find(element.dataset["todo-id"])
-    position = todo.position + 1
-    new_todo = Todo.create(list: todo.list)
-    new_todo.insert_at(position)
+
+    new_todo = Todo.create(list: todo.list, position: todo.position + 1)
     new_todo.save
 
     morph :nothing
