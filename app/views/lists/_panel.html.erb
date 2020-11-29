@@ -1,4 +1,5 @@
-<div data-controller="list"
+<div id="list-panel-<%=list.id%>"
+     data-controller="list"
      data-list-animation="150"
      data-list-handle=".handle"
      data-list-resource-name="todo"
@@ -12,7 +13,9 @@
     <%= list.name %>
   </span>
 
-  <% list.todos.each do |todo| %>
-    <%= render partial: 'todos/entry', locals: { todo: todo } %>
-  <% end %>
+  <div data-target="list.items">
+    <% list.todos.each do |todo| %>
+      <%= render partial: 'todos/entry', locals: { todo: todo } %>
+    <% end %>
+  </div>
 </div>

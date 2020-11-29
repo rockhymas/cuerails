@@ -140,10 +140,12 @@ export default class extends ApplicationController {
     const row = this.element.previousElementSibling
     if (row) {
       const input = row.querySelector("input[type='text']")
-      input.focus();
-      Velocity(row, {backgroundColor: '#2d842f'}).then(Velocity(row, {backgroundColor: '#FFF'}));
-      if (cursorAtEnd) {
-        input.setSelectionRange(input.value.length, input.value.length);
+      if (input) {
+        input.focus();
+        Velocity(row, {backgroundColor: '#2d842f'}).then(Velocity(row, {backgroundColor: '#FFF'}));
+        if (cursorAtEnd) {
+          input.setSelectionRange(input.value.length, input.value.length);
+        }
       }
     }
   }

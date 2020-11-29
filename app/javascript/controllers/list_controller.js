@@ -1,15 +1,21 @@
 import StimulusReflex from 'stimulus_reflex'
-import Sortable from "stimulus-sortable"
+import ApplicationController from './application_controller'
+import Sortable from 'sortablejs'
 import consumer from '../channels/consumer'
 import CableReady from 'cable_ready'
 import debounce from 'lodash/debounce'
 
-export default class extends Sortable {
-  static targets = [ 'title' ]
+export default class extends ApplicationController {
+  static targets = [ 'title', 'items' ]
+
+  initialize () {
+    this.end = this.end.bind(this);
+    this.add = this.add.bind(this);
+  }
 
   connect () {
     super.connect();
-    StimulusReflex.register(this)
+    StimulusReflex.register(this);
 
     this.subscription = consumer.subscriptions.create(
       {
@@ -18,10 +24,20 @@ export default class extends Sortable {
       },
       {
         received (data) {
-          if (data.cableReady) CableReady.perform(data.operations)
+          if (data.cableReady) CableReady.perform(data.operations);
         }
       }
-    )
+    );
+
+    const options = {
+      group: 'list',
+      animation: this.data.get('animation') || 150,
+      handle: this.data.get('handle') || undefined,
+      onEnd: this.end,
+      onAdd: this.add
+    };
+
+    this.sortable = new Sortable(this.itemsTarget, options);
 
     this.debouncedRename = debounce(() => {
       this.renaming = true;
@@ -35,8 +51,13 @@ export default class extends Sortable {
     this.subscription.unsubscribe();
   }
 
-  end ({ item, newIndex }) {
-    this.stimulate("Todo#reposition", item, newIndex + 1);
+  add(event) {
+    console.log('adding');
+    console.log(event);
+  }
+
+  end(event) {
+    this.stimulate("Todo#reposition", event.item, event.newIndex);
   }
 
   rename() {
@@ -89,23 +110,27 @@ export default class extends Sortable {
     }
   }
 
-  afterInsertTodo(element) {
+  afterInsertTodo() {
     if (this.inserting) {
-      const row = this.titleTarget.nextElementSibling
-      if (row) {
-        row.querySelector("input[type='text']").focus();
-        Velocity(row, {backgroundColor: '#2d842f'}).then(Velocity(row, {backgroundColor: '#FFF'}));
-      }
-      }
+      this.focusNextTodo();
+    }
 
     this.inserting = false;
   }
 
+  focusNextTodo() {
+    const row = this.titleTarget.nextElementSibling;
+    if (row) {
+      row.querySelector("input[type='text']").focus();
+      Velocity(row, {backgroundColor: '#2d842f'}).then(Velocity(row, {backgroundColor: '#FFF'}));
+    }
+}
+
   keydown(e) {
-    // if (e.key === 'ArrowDown') {
-    //   e.preventDefault();
-    //   this.focusNextTodo(e.target);
-    // }
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      this.focusNextTodo();
+    }
     // if (e.key === 'ArrowUp') {
     //   e.preventDefault();
     //   this.focusPrevTodo(e.target);

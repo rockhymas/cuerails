@@ -40,8 +40,10 @@ class TodoReflex < ApplicationReflex
 
   def reposition(new_index)
     todo = Todo.find(element.dataset["todo-id"])
-    todo.position = new_index
+    todo.position = new_index + 1
     todo.save
+
+    morph "#list-panel-#{todo.list.id}", render(partial: "lists/panel", locals: { list: todo.list })
   end
 
   def insertAfter
