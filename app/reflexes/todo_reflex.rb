@@ -38,6 +38,19 @@ class TodoReflex < ApplicationReflex
     morph :nothing
   end
 
+  def cloneTo(new_list, new_index)
+    todo = Todo.find(element.dataset["todo-id"])
+    list = List.find(new_list)
+
+    new_todo = Todo.create(list: list, title: todo.title, position: new_index + 1)
+    new_todo.save
+
+    cable_ready[ListChannel].remove(selector: "#todo-row-added")
+    cable_ready.broadcast_to(todo.list)
+
+    # morph "#todo-row-added", render(partial: "todos/entry", locals: { todo: new_todo })
+  end
+
   def reposition(new_index)
     todo = Todo.find(element.dataset["todo-id"])
     todo.position = new_index + 1

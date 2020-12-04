@@ -9,8 +9,12 @@ export default class extends ApplicationController {
   static targets = [ 'title', 'items' ]
 
   initialize () {
-    this.end = this.end.bind(this);
-    this.add = this.add.bind(this);
+    this.dragStart = this.dragStart.bind(this);
+    this.dragEnd = this.dragEnd.bind(this);
+    this.dragAdd = this.dragAdd.bind(this);
+    this.dragRemove = this.dragRemove.bind(this);
+    this.pullDragged = this.pullDragged.bind(this);
+    this.dragClone = this.dragClone.bind(this);
   }
 
   connect () {
@@ -30,11 +34,15 @@ export default class extends ApplicationController {
     );
 
     const options = {
-      group: 'list',
+      //group: { name: 'list', pull: this.pullDragged, revertClone: true },
       animation: this.data.get('animation') || 150,
       handle: this.data.get('handle') || undefined,
-      onEnd: this.end,
-      onAdd: this.add
+      removeCloneOnHide: false,
+      onStart: this.dragStart,
+      onEnd: this.dragEnd,
+      onAdd: this.dragAdd,
+      onRemove: this.dragRemove,
+      onClone: this.dragClone
     };
 
     this.sortable = new Sortable(this.itemsTarget, options);
@@ -51,13 +59,51 @@ export default class extends ApplicationController {
     this.subscription.unsubscribe();
   }
 
-  add(event) {
-    console.log('adding');
+  dragStart(event) {
+    console.log('starting' + this.element.dataset.listId);
     console.log(event);
   }
 
-  end(event) {
-    this.stimulate("Todo#reposition", event.item, event.newIndex);
+  dragEnd(event) {
+    console.log('ending' + this.element.dataset.listId);
+    console.log(event);
+    if (event.from === event.to) {
+      this.stimulate("Todo#reposition", event.item, event.newIndex);
+    } else {
+      // this.stimulate('List#forceUpdate');
+    }
+  }
+
+  dragClone(event) {
+    event.clone.id = 'todo-row-clone';
+  }
+
+  dragAdd(event) {
+    console.log('adding' + this.element.dataset.listId);
+    console.log(event);
+    // event.item.id = 'todo-row-added';
+    this.stimulate("List#cloneTo", this.element, event.item.dataset.todoId, event.newIndex);
+    // event.item.remove();
+  }
+
+  dragRemove(event) {
+    console.log('removing' + this.element.dataset.listId);
+    console.log(event);
+    // this.stimulate('Todo#delete', event.item);
+  }
+
+  afterDelete() {
+    Velocity(this.element, {opacity: 0}, {display: "none", complete: function() {
+      this.element.remove();
+    }.bind(this)});
+  }
+
+  pullDragged (to, from) {
+    if (typeof to.options !== 'undefined' && to.options.group.name !== from.options.group.name) {
+      return false
+    }
+
+    return 'clone'; //this.shouldCloneDragged ? 'clone' : true
   }
 
   rename() {
