@@ -8,14 +8,18 @@ class TodoReflex < ApplicationReflex
     todo = Todo.find(element.dataset["todo-id"])
     todo.toggle! :complete
 
-    morph "#todo-row-#{todo.id}", render(partial: "todos/entry", locals: { todo: todo })
+    morph :nothing
+    cable_ready[ListChannel].morph(selector: "#todo-row-#{todo.id}", html: render(partial: "todos/entry_contents", locals: { todo: todo }), children_only: true)
+    cable_ready.broadcast_to(todo.list)
   end
 
   def togglePin
     todo = Todo.find(element.dataset["todo-id"])
     todo.toggle! :pinned
 
-    morph "#todo-row-#{todo.id}", render(partial: "todos/entry", locals: { todo: todo })
+    morph :nothing
+    cable_ready.morph(selector: "#todo-row-#{todo.id}", html: render(partial: "todos/entry_contents", locals: { todo: todo }), children_only: true)
+    cable_ready.broadcast
   end
 
   def rename
@@ -23,7 +27,9 @@ class TodoReflex < ApplicationReflex
     todo.title = element.value
     todo.save
 
-    morph "#todo-row-#{todo.id}", render(partial: "todos/entry", locals: { todo: todo })
+    morph :nothing
+    cable_ready[ListChannel].morph(selector: "#todo-row-#{todo.id}", html: render(partial: "todos/entry_contents", locals: { todo: todo }), children_only: true)
+    cable_ready.broadcast_to(todo.list)
   end
 
   def forceUpdate
@@ -32,10 +38,14 @@ class TodoReflex < ApplicationReflex
   end
 
   def delete
-    todo = Todo.find(element.dataset["todo-id"])
+    todoId = element.dataset["todo-id"]
+    todo = Todo.find(todoId)
+    list = todo.list
     todo.destroy
     
     morph :nothing
+    cable_ready[ListChannel].dispatch_event(name: 'deleteTodo', selector: "#todo-row-#{todoId}")
+    cable_ready.broadcast_to(list)
   end
 
   def cloneTo(new_list, new_index)
@@ -56,7 +66,9 @@ class TodoReflex < ApplicationReflex
     todo.position = new_index + 1
     todo.save
 
-    morph "#list-panel-#{todo.list.id}", render(partial: "lists/panel", locals: { list: todo.list })
+    morph :nothing
+    cable_ready[ListChannel].morph(selector: "#list-panel-#{todo.list.id}", html: render(partial: "lists/panel", locals: { list: todo.list }), children_only: true)
+    cable_ready.broadcast_to(todo.list)
   end
 
   def insertAfter

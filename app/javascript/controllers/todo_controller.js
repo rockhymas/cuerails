@@ -30,13 +30,15 @@ export default class extends ApplicationController {
   }
 
   complete(event) {
-    this.checkboxTarget.checked = !this.checkboxTarget.checked;
     this.stimulate('Todo#complete', this.checkboxTarget);
   }
 
   togglePin(event) {
-    this.pinnedTarget.checked = !this.pinnedTarget.checked;
     this.stimulate('Todo#togglePin', this.pinnedTarget);
+  }
+
+  aftertogglePin() {
+    console.log('after toggle pin');
   }
 
   rename() {
@@ -77,7 +79,8 @@ export default class extends ApplicationController {
     Velocity(this.element, {opacity: 0}, {display: "none"});
   }
 
-  afterDelete() {
+  serverdelete(event) {
+    console.log(event);
     Velocity(this.element, {opacity: 0}, {display: "none", complete: function() {
       this.element.remove();
     }.bind(this)});
