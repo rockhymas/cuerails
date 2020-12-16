@@ -7,13 +7,13 @@
 
   <span id="list-title-<%=list.id%>"
         contenteditable="<%=list.date.blank?%>"
-        data-target="list.title"
+        data-list-target="title"
         data-action="input->list#rename keypress->list#keypress keydown->list#keydown blur->list#blur paste->list#paste"
         data-reflex-dataset="combined">
     <%= list.name %>
   </span>
 
-  <div data-target="list.items">
+  <div data-list-target="items">
     <% list.todos.each do |todo| %>
       <%= render partial: 'todos/entry', locals: { todo: todo } %>
     <% end %>

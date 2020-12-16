@@ -1,16 +1,14 @@
 # frozen_string_literal: true
 
 class TodoReflex < ApplicationReflex
-  include CableReady::Broadcaster
-  delegate :render, to: ApplicationController
-
   def complete
     todo = Todo.find(element.dataset["todo-id"])
     todo.toggle! :complete
 
     morph :nothing
-    cable_ready[ListChannel].morph(selector: "#todo-row-#{todo.id}", html: render(partial: "todos/entry_contents", locals: { todo: todo }), children_only: true)
-    cable_ready.broadcast_to(todo.list)
+    cable_ready[ListChannel]
+      .morph(selector: "#todo-row-#{todo.id}", html: render(partial: "todos/entry_contents", locals: { todo: todo }), children_only: true)
+      .broadcast_to(todo.list)
   end
 
   def togglePin
