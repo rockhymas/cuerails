@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 class ListReflex < ApplicationReflex
-  include CableReady::Broadcaster
-  delegate :render, to: ApplicationController
-
   def rename
     list = List.find(element.dataset["list-id"])
     list.title = element.dataset["value"]
