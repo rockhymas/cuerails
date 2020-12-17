@@ -12,7 +12,7 @@ const application = Application.start()
 application.register('sortable', Sortable)
 const context = require.context('controllers', true, /_controller\.js$/)
 application.load(definitionsFromContext(context))
-StimulusReflex.initialize(application, { consumer, controller })
+StimulusReflex.initialize(application, { consumer, controller, isolate: true })
 application.consumer = consumer
 if (process.env.RAILS_ENV === 'development') {
   StimulusReflex.debug = true

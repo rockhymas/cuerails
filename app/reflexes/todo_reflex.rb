@@ -16,8 +16,9 @@ class TodoReflex < ApplicationReflex
     todo.toggle! :pinned
 
     morph :nothing
-    cable_ready.morph(selector: "#todo-row-#{todo.id}", html: render(partial: "todos/entry_contents", locals: { todo: todo }), children_only: true)
-    cable_ready.broadcast
+    cable_ready[ListChannel]
+      .morph(selector: "#todo-options-#{todo.id}", html: render(partial: "todos/options", locals: { todo: todo }), children_only: true)
+      .broadcast_to(todo.list)
   end
 
   def rename
@@ -26,8 +27,9 @@ class TodoReflex < ApplicationReflex
     todo.save
 
     morph :nothing
-    cable_ready[ListChannel].morph(selector: "#todo-row-#{todo.id}", html: render(partial: "todos/entry_contents", locals: { todo: todo }), children_only: true)
-    cable_ready.broadcast_to(todo.list)
+    cable_ready[ListChannel]
+      .morph(selector: "#todo-row-#{todo.id}", html: render(partial: "todos/entry_contents", locals: { todo: todo }), children_only: true)
+      .broadcast_to(todo.list)
   end
 
   def forceUpdate
@@ -42,8 +44,9 @@ class TodoReflex < ApplicationReflex
     todo.destroy
     
     morph :nothing
-    cable_ready[ListChannel].dispatch_event(name: 'deleteTodo', selector: "#todo-row-#{todoId}")
-    cable_ready.broadcast_to(list)
+    cable_ready[ListChannel]
+      .dispatch_event(name: 'deleteTodo', selector: "#todo-row-#{todoId}")
+      .broadcast_to(list)
   end
 
   def cloneTo(new_list, new_index)
@@ -65,8 +68,9 @@ class TodoReflex < ApplicationReflex
     todo.save
 
     morph :nothing
-    cable_ready[ListChannel].morph(selector: "#list-panel-#{todo.list.id}", html: render(partial: "lists/panel", locals: { list: todo.list }), children_only: true)
-    cable_ready.broadcast_to(todo.list)
+    cable_ready[ListChannel]
+      .morph(selector: "#list-panel-#{todo.list.id}", html: render(partial: "lists/panel", locals: { list: todo.list }), children_only: true)
+      .broadcast_to(todo.list)
   end
 
   def insertAfter

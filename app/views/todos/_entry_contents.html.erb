@@ -1,9 +1,8 @@
 <div>
-  <%= check_box_tag "todo-#{todo.id}", '', todo.complete, data: { "todo-target": 'checkbox', action: 'change->todo#complete', "reflex-dataset": "combined" } %>
-  <%= text_field_tag "todo-title-#{todo.id}", todo.title, data: { "todo-target": 'title', action: 'input->todo#rename keypress->todo#keypress keydown->todo#keydown blur->todo#blur', "reflex-dataset": "combined" } %>
-  <%= content_tag :span, 'handle: ' + todo.position.to_s, class: "handle", data: { "todo-target": 'handle', action: 'click->todo#clickHandle' } %>
+  <%= check_box_tag "todo-#{todo.id}", "", todo.complete, data: { "todo-target": "checkbox", action: "change->todo#complete", "reflex-dataset": "combined" } %>
+  <%= text_field_tag "todo-title-#{todo.id}", todo.title, data: { "todo-target": "title", action: "input->todo#rename keypress->todo#keypress keydown->todo#keydown blur->todo#blur", "reflex-dataset": "combined" } %>
+  <%= content_tag :span, 'handle: ' + todo.position.to_s, class: "handle", data: { "todo-target": "handle", action: "click->todo#clickHandle" } %>
 </div>
-<div data-todo-target='options' style="display:none;">
-  <%= button_tag "Delete", id: "todo-delete-#{todo.id}", data: { "todo-target": 'delete', action: 'click->todo#delete', "reflex-dataset": "combined" } %>
-  <%= check_box_tag "todo-pinned-#{todo.id}", '', todo.pinned, data: { "todo-target": 'pinned', action: 'change->todo#togglePin', "reflex-dataset": "combined" } %>
+<div id="todo-options-<%= todo.id %>" data-todo-target="options" style="display:none;">
+  <%= render partial: 'todos/options', locals: { todo: todo } %>
 </div>

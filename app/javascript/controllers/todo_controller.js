@@ -37,10 +37,6 @@ export default class extends ApplicationController {
     this.stimulate('Todo#togglePin', this.pinnedTarget);
   }
 
-  aftertogglePin() {
-    console.log('after toggle pin');
-  }
-
   rename() {
     if (this.titleTarget.dataset.pendingRename) {
       delete this.titleTarget.dataset.pendingRename;

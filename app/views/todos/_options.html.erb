@@ -1,0 +1,2 @@
+<%= button_tag "Delete", id: "todo-delete-#{todo.id}", data: { "todo-target": "delete", action: "click->todo#delete", "reflex-dataset": "combined" } %>
+<%= check_box_tag "todo-pinned-#{todo.id}", '', todo.pinned, data: { "todo-target": "pinned", action: "change->todo#togglePin", "reflex-dataset": "combined" } %>
