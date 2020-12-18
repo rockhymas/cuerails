@@ -6,7 +6,10 @@ class ListReflex < ApplicationReflex
     list.title = element.dataset["value"]
     list.save
 
-    # morph "#todo-row-#{todo.id}", render(partial: "todos/entry", locals: { todo: todo })
+    morph :nothing
+    cable_ready[ListChannel]
+      .morph(selector: "#list-panel-#{list.id}", html: render(partial: "lists/panel", locals: { list: list }), children_only: true)
+      .broadcast_to(list)
   end
 
   def forceUpdate
@@ -32,7 +35,6 @@ class ListReflex < ApplicationReflex
 
     new_todo = Todo.create(list_id: element.dataset["list-id"], title: todo.title, position: new_index + 1)
     new_todo.save
-    ActiveRecord::Base.connection.query_cache.clear
     # cable_ready[ListChannel].remove(selector: "#todo-row-added")
     # cable_ready.broadcast_to(todo.list)
 

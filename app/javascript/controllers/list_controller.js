@@ -84,7 +84,7 @@ export default class extends ApplicationController {
     // this.stimulate('Todo#delete', event.item);
   }
 
-  afterDelete () {
+  afterDelete = () => {
     Velocity(
       this.element,
       { opacity: 0 },
@@ -116,7 +116,7 @@ export default class extends ApplicationController {
     this.debouncedRename()
   }
 
-  afterRename () {
+  afterRename = () => {
     if (this.titleTarget === document.activeElement && !this.renaming) {
       if (!document.hasFocus()) {
         this.titleTarget.blur()
