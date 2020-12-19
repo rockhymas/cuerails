@@ -31,14 +31,26 @@ class ListReflex < ApplicationReflex
 
   def cloneTo(todo_id, new_index)
     todo = Todo.find(todo_id)
-    #list = List.find(element.dataset["list-id"])
+    old_list = todo.list
+    list = List.find(element.dataset["list-id"])
 
-    new_todo = Todo.create(list_id: element.dataset["list-id"], title: todo.title, position: new_index + 1)
+    new_todo = Todo.create(list_id: list.id, title: todo.title, position: new_index + 1)
     new_todo.save
-    # cable_ready[ListChannel].remove(selector: "#todo-row-added")
-    # cable_ready.broadcast_to(todo.list)
 
-    # morph "#todo-row-added", render(partial: "todos/entry", locals: { todo: new_todo })
+    todoPinned = todo.pinned
+    if !todoPinned
+      todo.destroy
+    end
+
+    morph :nothing
+    cable_ready[ListChannel]
+      .morph(selector: "#list-panel-#{list.id}", html: render(partial: "lists/panel", locals: { list: list }), children_only: true)
+      .broadcast_to(list)
+    if !todoPinned
+      cable_ready[ListChannel]
+        .dispatch_event(name: 'deleteTodo', selector: "#todo-row-#{todo_id}")
+        .broadcast_to(old_list)
+    end
   end
 
 end

@@ -48,6 +48,7 @@ export default class extends ApplicationController {
   dragStart = event => {
     console.log('starting' + this.element.dataset.listId)
     console.log(event)
+    this.shouldCloneDragged = event.item.querySelector('[data-todo-target="pinned"]').checked
   }
 
   dragEnd = event => {
@@ -61,7 +62,7 @@ export default class extends ApplicationController {
   }
 
   dragClone = event => {
-    event.clone.id = 'todo-row-clone'
+    // event.clone.id = 'todo-row-clone'
   }
 
   dragAdd = event => {
@@ -104,7 +105,7 @@ export default class extends ApplicationController {
       return false
     }
 
-    return 'clone' //this.shouldCloneDragged ? 'clone' : true
+    return this.shouldCloneDragged ? 'clone' : true
   }
 
   rename = () => {
