@@ -44,7 +44,7 @@ class ListReflex < ApplicationReflex
 
     morph :nothing
     cable_ready[ListChannel]
-      .morph(selector: "#list-panel-#{list.id}", html: render(partial: "lists/panel", locals: { list: list }), children_only: true)
+      .morph(selector: "#list-panel-#{list.id}", html: render(partial: "lists/panel_contents", locals: { list: list }), children_only: true)
       .broadcast_to(list)
     if !todoPinned
       cable_ready[ListChannel]
