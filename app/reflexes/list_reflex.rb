@@ -3,7 +3,7 @@
 class ListReflex < ApplicationReflex
   def rename
     list = List.find(element.dataset["list-id"])
-    list.title = element.dataset["value"]
+    list.title = element.value
     list.save
 
     morph :nothing

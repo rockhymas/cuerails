@@ -22,7 +22,7 @@ export default class extends ApplicationController {
     )
 
     const options = {
-      //group: { name: 'list', pull: this.pullDragged, revertClone: true },
+      group: { name: 'list', pull: this.pullDragged, revertClone: true },
       animation: this.data.get('animation') || 150,
       handle: this.data.get('handle') || undefined,
       removeCloneOnHide: false,
@@ -37,7 +37,6 @@ export default class extends ApplicationController {
 
     this.debouncedRename = debounce(() => {
       this.renaming = true
-      this.titleTarget.dataset.value = this.titleTarget.innerText
       this.stimulate('List#rename', this.titleTarget)
     }, 1000)
   }
