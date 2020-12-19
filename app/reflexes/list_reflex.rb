@@ -14,7 +14,6 @@ class ListReflex < ApplicationReflex
 
   def forceUpdate
     list = List.find(element.dataset["list-id"])
-    # morph "#todo-row-#{todo.id}", render(partial: "todos/entry", locals: { todo: todo })
   end
 
   def insertTodo

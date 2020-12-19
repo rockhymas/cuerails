@@ -80,8 +80,9 @@ class TodoReflex < ApplicationReflex
     new_todo.save
 
     morph :nothing
-    cable_ready[ListChannel].insert_adjacent_html(selector: "#todo-row-#{todo.id}", position: :afterend, html: render(partial: "todos/entry", locals: { todo: new_todo }))
-    cable_ready.broadcast_to(todo.list)
+    cable_ready[ListChannel]
+      .insert_adjacent_html(selector: "#todo-row-#{todo.id}", position: :afterend, html: render(partial: "todos/entry", locals: { todo: new_todo }))
+      .broadcast_to(todo.list)
   end
 
   # Add Reflex methods in this file.
