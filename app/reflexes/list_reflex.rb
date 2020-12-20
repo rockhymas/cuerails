@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class ListReflex < ApplicationReflex
+  
   def rename
     list = List.find(element.dataset["list-id"])
     list.title = element.value

@@ -1,8 +1,9 @@
 <div id="list-panel-<%=list.id%>"
-     data-controller="list"
+     data-controller="list update"
      data-list-animation="150"
      data-list-handle=".handle"
-     data-list-resource-name="todo"
-     data-list-id="<%= list.id%>" >
+     data-list-id="<%= list.id%>"
+     data-update-name-value="List"
+     data-update-id-value="<%= list.id%>" >
   <%= render partial: 'lists/panel_contents', locals: { list: list } %>
 </div>
