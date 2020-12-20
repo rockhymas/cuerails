@@ -29,7 +29,7 @@ class ListReflex < ApplicationReflex
     cable_ready.broadcast_to(list)
   end
 
-  def reposition(new_index)
+  def positionItem(new_index)
     todo = Todo.find(element.dataset["todo-id"])
     todo.position = new_index + 1
     todo.save
@@ -40,7 +40,8 @@ class ListReflex < ApplicationReflex
       .broadcast_to(todo.list)
   end
 
-  def cloneTo(todo_id, new_index)
+  def cloneTo(new_index)
+    todo_id = element.dataset["todo-id"]
     todo = Todo.find(todo_id)
     old_list = todo.list
     list = List.find(element.dataset["list-id"])

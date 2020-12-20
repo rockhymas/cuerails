@@ -32,7 +32,7 @@ export default class extends ApplicationController {
 
   dragEnd = event => {
     if (event.from === event.to) {
-      this.stimulate('List#reposition', event.item, event.newIndex)
+      this.stimulate('List#positionItem', event.item, event.newIndex)
     } else {
       // handled by the dragAdd method
     }
@@ -42,7 +42,6 @@ export default class extends ApplicationController {
     this.stimulate(
       'List#cloneTo',
       event.item,
-      event.item.dataset.todoId,
       event.newIndex
     )
   }
