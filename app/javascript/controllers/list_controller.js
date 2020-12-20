@@ -32,7 +32,7 @@ export default class extends ApplicationController {
 
   dragEnd = event => {
     if (event.from === event.to) {
-      this.stimulate('Todo#reposition', event.item, event.newIndex)
+      this.stimulate('List#reposition', event.item, event.newIndex)
     } else {
       // handled by the dragAdd method
     }

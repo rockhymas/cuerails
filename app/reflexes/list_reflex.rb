@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ListReflex < ApplicationReflex
-  
+
   def rename
     list = List.find(element.dataset["list-id"])
     list.title = element.value
@@ -27,6 +27,17 @@ class ListReflex < ApplicationReflex
     morph :nothing
     cable_ready[ListChannel].insert_adjacent_html(selector: "#list-title-#{list.id}", position: :afterend, html: render(partial: "todos/entry", locals: { todo: new_todo }))
     cable_ready.broadcast_to(list)
+  end
+
+  def reposition(new_index)
+    todo = Todo.find(element.dataset["todo-id"])
+    todo.position = new_index + 1
+    todo.save
+
+    morph :nothing
+    cable_ready[ListChannel]
+      .morph(selector: "#list-panel-#{todo.list.id}", html: render(partial: "lists/panel", locals: { list: todo.list }), children_only: true)
+      .broadcast_to(todo.list)
   end
 
   def cloneTo(todo_id, new_index)
