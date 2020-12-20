@@ -39,14 +39,12 @@ export default class extends ApplicationController {
   }
 
   dragAdd = event => {
-    // event.item.id = 'todo-row-added';
     this.stimulate(
       'List#cloneTo',
-      this.element,
+      event.item,
       event.item.dataset.todoId,
       event.newIndex
     )
-    // event.item.remove();
   }
 
   pullDragged = (to, from) => {

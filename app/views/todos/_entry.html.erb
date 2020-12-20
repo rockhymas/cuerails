@@ -1,3 +1,7 @@
-<div id="todo-row-<%= todo.id %>" data-controller="todo" data-todo-id="<%= todo.id%>" data-action="deleteTodo->todo#serverdelete">
+<div id="todo-row-<%= todo.id %>"
+    data-controller="todo"
+    data-todo-id="<%= todo.id%>"
+    data-action="deleteTodo->todo#serverdelete"
+    data-reflex-dataset="combined">
   <%= render partial: 'todos/entry_contents', locals: { todo: todo } %>
 </div>
