@@ -1,5 +1,4 @@
 import ApplicationController from './application_controller'
-import Sortable from 'sortablejs'
 import debounce from 'lodash/debounce'
 
 export default class extends ApplicationController {
@@ -8,53 +7,10 @@ export default class extends ApplicationController {
   connect () {
     super.connect()
 
-    const options = {
-      group: { name: 'list', pull: this.pullDragged, revertClone: true },
-      animation: this.data.get('animation') || 150,
-      handle: this.data.get('handle') || undefined,
-      removeCloneOnHide: false,
-      onStart: this.dragStart,
-      onEnd: this.dragEnd,
-      onAdd: this.dragAdd,
-    }
-
-    this.sortable = new Sortable(this.itemsTarget, options)
-
     this.debouncedRename = debounce(() => {
       this.renaming = true
       this.stimulate('List#rename', this.titleTarget)
     }, 1000)
-  }
-
-  dragStart = event => {
-    this.shouldCloneDragged = event.item.querySelector('[data-todo-target="pinned"]').checked
-  }
-
-  dragEnd = event => {
-    if (event.from === event.to) {
-      this.stimulate('List#positionItem', event.item, event.newIndex)
-    } else {
-      // handled by the dragAdd method
-    }
-  }
-
-  dragAdd = event => {
-    this.stimulate(
-      'List#cloneTo',
-      event.item,
-      event.newIndex
-    )
-  }
-
-  pullDragged = (to, from) => {
-    if (
-      typeof to.options !== 'undefined' &&
-      to.options.group.name !== from.options.group.name
-    ) {
-      return false
-    }
-
-    return this.shouldCloneDragged ? 'clone' : true
   }
 
   rename = () => {

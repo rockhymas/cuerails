@@ -25,8 +25,9 @@ class ListReflex < ApplicationReflex
     new_todo.save
 
     morph :nothing
-    cable_ready[ListChannel].insert_adjacent_html(selector: "#list-title-#{list.id}", position: :afterend, html: render(partial: "todos/entry", locals: { todo: new_todo }))
-    cable_ready.broadcast_to(list)
+    cable_ready[ListChannel]
+      .insert_adjacent_html(selector: "#list-items-#{list.id}", position: :afterbegin, html: render(partial: "todos/entry", locals: { todo: new_todo }))
+      .broadcast_to(list)
   end
 
   def positionItem(new_index)

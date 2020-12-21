@@ -7,7 +7,7 @@
   value="<%= list.name %>">
 </span>
 
-<div data-list-target="items">
+<div id="list-items-<%=list.id%>" data-list-target="items" data-controller="sortable" data-sortable-name-value="List">
   <% list.todos.each do |todo| %>
     <%= render partial: 'todos/entry', locals: { todo: todo } %>
   <% end %>
