@@ -1,17 +1,4 @@
-<div>
-  <% List.all.each do |list| %>
-    <div>
-      <%= list.name %>
-    </div>
-  <% end %>
-  <%= link_to "Make a plan", new_list_path %>
-</div>
-
-<br>
-
 <%= render partial: 'lists/panel', locals: { list: current_user.current_day_plan } %>
-
-<br>
 
 <% if current_user.plan_list %>
   <%= render partial: 'lists/panel', locals: { list: current_user.plan_list } %>

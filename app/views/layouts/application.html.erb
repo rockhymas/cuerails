@@ -17,10 +17,20 @@
       <%= link_to(t(:log_out), destroy_user_session_path, method: :delete) %>
       <%= link_to(t(:profile), edit_user_registration_path) %>
     <% elsif controller_name != 'sessions' %>
-      <%= link_to(t(:log_in),  new_user_session_path) %>
+      <%= link_to(t(:log_in), new_user_session_path) %>
     <% else %>
-      <%= link_to(t(:sign_up),  new_user_registration_path) %>
+      <%= link_to(t(:sign_up), new_user_registration_path) %>
     <% end %>
-    <%= yield %>
+
+    <div id="sidebar">
+      <% List.all.each do |list| %>
+        <div>
+          <%= link_to(list.name, list) %>
+        </div>
+      <% end %>
+      <%= link_to "Make a plan", "#" %>
+    </div>
+
+    <%= content_for?(:content) ? yield(:content) : yield %>
   </body>
 </html>
