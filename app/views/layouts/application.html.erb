@@ -22,14 +22,18 @@
       <%= link_to(t(:sign_up), new_user_registration_path) %>
     <% end %>
 
-    <div id="sidebar">
-      <% List.all.each do |list| %>
-        <div>
-          <%= link_to(list.name, list) %>
+    <% if user_signed_in? %>
+      <div id="sidebar">
+        <div id="plan_list">
+          <% current_user.plan_list_set.lists.each do |list| %>
+            <div>
+              <%= link_to(list.name, list) %>
+            </div>
+          <% end %>
+          <%= link_to "Make a plan", "#" %>
         </div>
-      <% end %>
-      <%= link_to "Make a plan", "#" %>
-    </div>
+      </div>
+    <% end %>
 
     <%= content_for?(:content) ? yield(:content) : yield %>
   </body>
