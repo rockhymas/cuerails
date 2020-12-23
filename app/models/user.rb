@@ -21,8 +21,9 @@ class User < ApplicationRecord
       zone = ActiveSupport::TimeZone.new(time_zone)
       today = zone.now.to_date
 
-      plan_list_set = ListSet.create
+      self.plan_list_set = ListSet.create(user: self)
       today_plan = List.create(list_set: plan_list_set, user: self, date: today)
+      self.save
     end
   end
 end
