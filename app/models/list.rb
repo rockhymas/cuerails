@@ -1,6 +1,7 @@
 class List < ApplicationRecord
   has_many :todos, -> { order(position: :asc) }
   belongs_to :user
+  belongs_to :list_set, optional: true
 
   def name
     if date == nil

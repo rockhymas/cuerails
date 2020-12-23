@@ -10,10 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_25_040300) do
+ActiveRecord::Schema.define(version: 2020_12_23_181156) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "list_sets", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_list_sets_on_user_id"
+  end
 
   create_table "lists", force: :cascade do |t|
     t.string "title"
@@ -21,6 +28,8 @@ ActiveRecord::Schema.define(version: 2020_11_25_040300) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "user_id", null: false
+    t.bigint "list_set_id"
+    t.index ["list_set_id"], name: "index_lists_on_list_set_id"
     t.index ["user_id"], name: "index_lists_on_user_id"
   end
 
@@ -45,12 +54,17 @@ ActiveRecord::Schema.define(version: 2020_11_25_040300) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "time_zone", default: "Pacific Time (US & Canada)"
     t.bigint "plan_list_id"
+    t.bigint "plan_list_set_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["plan_list_id"], name: "index_users_on_plan_list_id"
+    t.index ["plan_list_set_id"], name: "index_users_on_plan_list_set_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "list_sets", "users"
+  add_foreign_key "lists", "list_sets"
   add_foreign_key "lists", "users"
   add_foreign_key "todos", "lists"
+  add_foreign_key "users", "list_sets", column: "plan_list_set_id"
   add_foreign_key "users", "lists", column: "plan_list_id"
 end
