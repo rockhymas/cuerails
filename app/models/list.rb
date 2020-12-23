@@ -19,4 +19,10 @@ class List < ApplicationRecord
 
     date.strftime('%m/%d/%Y') + " Plan"
   end
+
+  before_create do
+    if self.todos.length == 0
+      self.todos << Todo.create
+    end
+  end
 end

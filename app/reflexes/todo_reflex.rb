@@ -42,6 +42,17 @@ class TodoReflex < ApplicationReflex
     todoId = element.dataset["todo-id"]
     todo = Todo.find(todoId)
     list = todo.list
+
+    if list.todos.length == 1
+      todo.title = ''
+      todo.save
+      morph :nothing
+      cable_ready[ListChannel]
+        .morph(selector: "#todo-row-#{todo.id}", html: render(partial: "todos/entry_contents", locals: { todo: todo }), children_only: true)
+        .broadcast_to(todo.list)
+      return
+    end
+
     todo.destroy
     
     morph :nothing

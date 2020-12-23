@@ -57,7 +57,7 @@ export default class extends ApplicationController {
   delete() {
     this.debouncedRename.flush();
     this.stimulate('Todo#delete', this.deleteTarget);
-    Velocity(this.element, {opacity: 0}, {display: "none"});
+    // Velocity(this.element, {opacity: 0}, {display: "none"});
   }
 
   serverdelete(event) {
