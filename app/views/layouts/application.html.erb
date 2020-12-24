@@ -24,13 +24,30 @@
 
     <% if user_signed_in? %>
       <div id="sidebar">
-        <div id="plan_list">
+        <div id="plan_lists">
           <% current_user.plan_list_set.lists.each do |list| %>
             <div>
               <%= link_to(list.name, list) %>
             </div>
           <% end %>
           <%= link_to "Make a plan", "#" %>
+        </div>
+        <div id="current_lists">
+          <% current_user.current_list_set.lists.each do |list| %>
+            <div>
+              <%= link_to(list.name, list) %>
+            </div>
+          <% end %>
+          <div>
+            <%= link_to(t(:new_list), new) %>
+          </div>
+        </div>
+        <div id="archive_lists">
+          <% current_user.lists.where(list_set_id: nil).each do |list| %>
+            <div>
+              <%= link_to(list.name, list) %>
+            </div>
+          <% end %>
         </div>
       </div>
     <% end %>

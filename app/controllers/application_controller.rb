@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   def index
-    current_user.ensure_plan_list
+    current_user.ensure_list_sets
   end
 
   protected

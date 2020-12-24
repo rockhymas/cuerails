@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_23_181156) do
+ActiveRecord::Schema.define(version: 2020_12_24_142822) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +55,8 @@ ActiveRecord::Schema.define(version: 2020_12_23_181156) do
     t.string "time_zone", default: "Pacific Time (US & Canada)"
     t.bigint "plan_list_id"
     t.bigint "plan_list_set_id"
+    t.bigint "current_list_set_id"
+    t.index ["current_list_set_id"], name: "index_users_on_current_list_set_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["plan_list_id"], name: "index_users_on_plan_list_id"
     t.index ["plan_list_set_id"], name: "index_users_on_plan_list_set_id"
@@ -65,6 +67,7 @@ ActiveRecord::Schema.define(version: 2020_12_23_181156) do
   add_foreign_key "lists", "list_sets"
   add_foreign_key "lists", "users"
   add_foreign_key "todos", "lists"
+  add_foreign_key "users", "list_sets", column: "current_list_set_id"
   add_foreign_key "users", "list_sets", column: "plan_list_set_id"
   add_foreign_key "users", "lists", column: "plan_list_id"
 end
