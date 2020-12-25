@@ -1,0 +1,34 @@
+<div id="sidebar">
+  <div id="list-set-<%=current_user.plan_list_set.id%>"
+       data-controller="update"
+       data-update-name-value="ListSet"
+       data-update-id-value="<%= current_user.plan_list_set.id%>" >
+    <div>Plans</div>
+    <div id="list-set-contents-<%=current_user.plan_list_set.id%>">
+      <%= render partial: 'list_sets/pane', locals: { list_set: current_user.plan_list_set } %>
+    </div>
+    <%= link_to "Make a plan", "#" %>
+  </div>
+
+  <div id="list-set-<%=current_user.current_list_set.id%>"
+       data-controller="update"
+       data-update-name-value="ListSet"
+       data-update-id-value="<%= current_user.current_list_set.id%>" >
+    <div>Current Lists</div>
+    <div id="list-set-contents-<%=current_user.current_list_set.id%>">
+      <%= render partial: 'list_sets/pane', locals: { list_set: current_user.current_list_set } %>
+    </div>
+    <div>
+      <%= link_to(t(:new_list), current_new_list_path, method: :post) %>
+    </div>
+  </div>
+
+  <div id="archive_lists">
+    <div>Archive Lists</div>
+    <% current_user.lists.where(list_set_id: nil).each do |list| %>
+      <div>
+        <%= link_to(list.name, list) %>
+      </div>
+    <% end %>
+  </div>
+</div>

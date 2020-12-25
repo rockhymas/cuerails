@@ -23,33 +23,7 @@
     <% end %>
 
     <% if user_signed_in? %>
-      <div id="sidebar">
-        <div id="plan_lists">
-          <% current_user.plan_list_set.lists.each do |list| %>
-            <div>
-              <%= link_to(list.name, list) %>
-            </div>
-          <% end %>
-          <%= link_to "Make a plan", "#" %>
-        </div>
-        <div id="current_lists">
-          <% current_user.current_list_set.lists.each do |list| %>
-            <div>
-              <%= link_to(list.name, list) %>
-            </div>
-          <% end %>
-          <div>
-            <%= link_to(t(:new_list), current_new_list_path, method: :post) %>
-          </div>
-        </div>
-        <div id="archive_lists">
-          <% current_user.lists.where(list_set_id: nil).each do |list| %>
-            <div>
-              <%= link_to(list.name, list) %>
-            </div>
-          <% end %>
-        </div>
-      </div>
+      <%= render partial: 'sidebar' %>
     <% end %>
 
     <%= content_for?(:content) ? yield(:content) : yield %>
