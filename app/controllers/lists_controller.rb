@@ -11,6 +11,11 @@ class ListsController < ApplicationController
     end
   end
 
+  def current
+    new_list = List.create(list_set: current_user.current_list_set, user: current_user)
+    redirect_to new_list
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_list

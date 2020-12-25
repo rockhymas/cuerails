@@ -39,7 +39,7 @@
             </div>
           <% end %>
           <div>
-            <%= link_to(t(:new_list), new) %>
+            <%= link_to(t(:new_list), current_new_list_path, method: :post) %>
           </div>
         </div>
         <div id="archive_lists">

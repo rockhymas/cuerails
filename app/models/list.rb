@@ -4,7 +4,10 @@ class List < ApplicationRecord
   belongs_to :list_set, optional: true
 
   def name
-    if date == nil
+    if is_name_editable?
+      if title == nil || title == ''
+        return 'Untitled'
+      end
       return title
     end
 
@@ -18,6 +21,18 @@ class List < ApplicationRecord
     end
 
     date.strftime('%m/%d/%Y') + " Plan"
+  end
+
+  def editable_name
+    if is_name_editable?
+      return title
+    end
+
+    return nil
+  end
+
+  def is_name_editable?
+    date.blank?
   end
 
   before_create do
