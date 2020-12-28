@@ -22,14 +22,14 @@ class User < ApplicationRecord
       zone = ActiveSupport::TimeZone.new(time_zone)
       today = zone.now.to_date
 
-      self.plan_list_set = ListSet.create(user: self)
+      self.plan_list_set = ListSet.create(user: self, user_managed: false)
       today_plan = List.create(list_set: plan_list_set, user: self, date: today)
       # TODO: fill today plan with instructions, rename it as instructions, walk people through initial planning
       self.save
     end
 
     if current_list_set.nil?
-      self.current_list_set = ListSet.create(user: self)
+      self.current_list_set = ListSet.create(user: self, user_managed: true)
       self.save
     end
   end
