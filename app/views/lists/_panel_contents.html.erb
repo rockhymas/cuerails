@@ -7,7 +7,7 @@
   value="<%= list.is_name_editable? ? list.editable_name : list.name %>">
 </span>
 
-<div id="list-items-<%=list.id%>" data-list-target="items" data-controller="sortable" data-sortable-name-value="List">
+<div id="list-items-<%=list.id%>" data-list-target="items" data-controller="sortable" data-sortable-name-value="List" data-sortable-handle=".handle">
   <% list.todos.each do |todo| %>
     <%= render partial: 'todos/entry', locals: { todo: todo } %>
   <% end %>

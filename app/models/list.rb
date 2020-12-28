@@ -2,6 +2,7 @@ class List < ApplicationRecord
   has_many :todos, -> { order(position: :asc) }
   belongs_to :user
   belongs_to :list_set, optional: true
+  acts_as_list scope: :list_set
 
   def name
     if is_name_editable?

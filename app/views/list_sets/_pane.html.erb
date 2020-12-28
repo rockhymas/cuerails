@@ -1,5 +1,7 @@
-<% list_set.lists.each do |list| %>
-  <div>
-    <%= link_to(list.name, list) %>
-  </div>
-<% end %>
+<div id="list-set-items-<%=list_set.id%>" data-controller="sortable" data-sortable-name-value="ListSet" data-sortable-handle=".handle">
+  <% list_set.lists.each do |list| %>
+    <div data-list-id="<%= list.id %>">
+      <%= link_to(list.name, list) %> <span class="handle">handle</span>
+    </div>
+  <% end %>
+</div>

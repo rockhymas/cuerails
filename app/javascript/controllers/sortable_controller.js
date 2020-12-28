@@ -22,7 +22,8 @@ export default class extends ApplicationController {
 
   dragStart = event => {
     // TODO: figure out how to indicate pinned status in items
-    this.shouldCloneDragged = event.item.querySelector('[data-todo-target="pinned"]').checked
+    let el = event.item.querySelector('[data-todo-target="pinned"]')
+    this.shouldCloneDragged = el === null ? false : el.checked
   }
 
   dragEnd = event => {
