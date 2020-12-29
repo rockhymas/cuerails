@@ -19,6 +19,8 @@ class List < ApplicationRecord
       return "Today's Plan"
     elsif date == today - 1
       return "Yesterday's Plan"
+    elsif date == today + 1
+      return "Tomorrow's Plan"
     end
 
     date.strftime('%m/%d/%Y') + " Plan"

@@ -1,5 +1,5 @@
 <%= render partial: 'lists/panel', locals: { list: current_user.current_day_plan } %>
 
-<% if current_user.plan_list %>
+<% if current_user.plan_list.present? %>
   <%= render partial: 'lists/panel', locals: { list: current_user.plan_list } %>
 <% end %>

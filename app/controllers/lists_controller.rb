@@ -1,6 +1,10 @@
 class ListsController < ApplicationController
   before_action :set_list, only: [:show, :destroy]
 
+  def index
+    current_user.ensure_list_sets
+  end
+
   def show
   end
 
