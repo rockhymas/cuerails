@@ -1,16 +1,5 @@
 <div id="sidebar">
-  <div id="list-set-<%=current_user.plan_list_set.id%>"
-       data-controller="update"
-       data-update-name-value="ListSet"
-       data-update-id-value="<%= current_user.plan_list_set.id%>" >
-    <div>Plans</div>
-    <div id="list-set-contents-<%=current_user.plan_list_set.id%>">
-      <%= render partial: 'list_sets/pane', locals: { list_set: current_user.plan_list_set } %>
-    </div>
-    <% if current_user.can_plan_day? %>
-      <%= link_to t(:plan_next_day), plan_next_day_path, method: :post %>
-    <% end %>
-  </div>
+  <%= render partial: 'list_sets/plan_set', locals: { list_set: current_user.plan_list_set } %>
 
   <div id="list-set-<%=current_user.current_list_set.id%>"
        data-controller="update"
@@ -18,7 +7,7 @@
        data-update-id-value="<%= current_user.current_list_set.id%>" >
     <div>Current Lists</div>
     <div id="list-set-contents-<%=current_user.current_list_set.id%>">
-      <%= render partial: 'list_sets/pane', locals: { list_set: current_user.current_list_set } %>
+      <%= render partial: 'list_sets/items', locals: { list_set: current_user.current_list_set } %>
     </div>
     <div>
       <%= link_to(t(:new_list), current_new_list_path, method: :post) %>

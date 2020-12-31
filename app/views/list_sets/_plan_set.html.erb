@@ -1,0 +1,12 @@
+<div id="list-set-<%=list_set.id%>"
+      data-controller="update"
+      data-update-name-value="ListSet"
+      data-update-id-value="<%= list_set.id%>" >
+  <div>Plans</div>
+  <div id="list-set-contents-<%= list_set.id %>">
+    <%= render partial: 'list_sets/items', locals: { list_set: list_set } %>
+  </div>
+  <% if current_user.can_plan_day? %>
+    <%= link_to t(:plan_next_day), plan_next_day_path, method: :post %>
+  <% end %>
+</div>
