@@ -1,4 +1,5 @@
 const colors = require('tailwindcss/colors')
+console.log('tailwind config')
 
 module.exports = {
   purge: [],
@@ -8,8 +9,8 @@ module.exports = {
       transparent: 'transparent',
       current: 'currentColor',
 
-      // black: colors.black,
-      // white: colors.white,
+      black: colors.black,
+      white: colors.white,
       // gray: colors.coolGray,
       // red: colors.red,
       // yellow: colors.amber,
@@ -33,7 +34,9 @@ module.exports = {
     extend: {},
   },
   variants: {
-    extend: {},
+    extend: {
+      backgroundColor: ['disabled'],
+    }
   },
   plugins: [],
 }
