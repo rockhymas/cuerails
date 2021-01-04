@@ -77,4 +77,9 @@ class User < ApplicationRecord
     self.plan_list = nil
     self.save
   end
+
+  def gravatar_url
+    gravatar_id = Digest::MD5::hexdigest(self.email.downcase)
+    "https://secure.gravatar.com/avatar/#{gravatar_id}"
+  end
 end
