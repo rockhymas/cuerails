@@ -10,11 +10,15 @@
     <%= stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
-  <body class="bg-green-600 text-white font-sans sm:px-4"
+  <body class="bg-green-600 text-white font-sans sm:px-4 pt-4"
         data-controller="radiolabel" data-radiolabel-duration-value="2">
     <p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p>
-    <%= link_to(t(:home), root_path) %>
+
+    <%= link_to(root_path) do %>
+      <%= image_tag('logo.png', height: '27', width: '120') %>
+    <% end %>
+
     <% if user_signed_in? %>
       <%= link_to(t(:log_out), destroy_user_session_path, method: :delete) %>
       <%= link_to(t(:profile), edit_user_registration_path) %>
