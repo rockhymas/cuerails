@@ -1,7 +1,8 @@
-<div id="sidebar">
+<div id="sidebar" class="flex flex-col py-4 space-y-4 w-full">
   <%= render partial: 'list_sets/plan_set', locals: { list_set: current_user.plan_list_set } %>
 
   <div id="list-set-<%=current_user.current_list_set.id%>"
+       class="bg-white text-black p-2 border border-green-100 rounded"
        data-controller="update"
        data-update-name-value="ListSet"
        data-update-id-value="<%= current_user.current_list_set.id%>" >
@@ -14,7 +15,7 @@
     </div>
   </div>
 
-  <div id="archive_lists">
+  <div id="archive_lists" class="bg-white text-black p-2 border border-green-100 rounded divide-y divide-green-100">
     <div>Archive Lists</div>
     <% current_user.lists.where(list_set_id: nil).each do |list| %>
       <div>
