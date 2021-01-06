@@ -15,24 +15,38 @@
     <p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p>
 
-    <%= link_to(root_path) do %>
-      <%= image_tag('logo.png', height: '27', width: '120') %>
-    <% end %>
+    <div class="flex flex-col sm:flex-row space-x-4 space-y-4">
+      <div class="flex-grow sm:flex-grow-0 px-4 sm:px-0 sm:w-60">
+        <div class="relative">
+          <%= link_to(root_path) do %>
+            <%= image_tag('logo.png', height: '27', width: '120', class: "inline") %>
+          <% end %>
 
-    <% if user_signed_in? %>
-      <%= image_tag(current_user.gravatar_url, size: '30x30', alt: current_user.email) %>
-      <%= link_to(t(:log_out), destroy_user_session_path, method: :delete) %>
-      <%= link_to(t(:profile), edit_user_registration_path) %>
-    <% elsif controller_name != 'sessions' %>
-      <%= link_to(t(:log_in), new_user_session_path) %>
-    <% else %>
-      <%= link_to(t(:sign_up), new_user_registration_path) %>
-    <% end %>
+          <% if user_signed_in? %>
+            <div data-controller="menu" class="inline-block float-right">
+              <%= image_tag(current_user.gravatar_url, size: "30x30", class: "inline rounded border border-green-100", data: { action: "click->menu#toggle"}) %>
+              <div data-menu-target="dropdown" class="hidden absolute bg-white text-black right-0 p-2">
+                <div>
+                  <%= link_to(t(:log_out), destroy_user_session_path, method: :delete) %>
+                </div>
+                <div>
+                  <%= link_to(t(:profile), edit_user_registration_path) %>
+                </div>
+              </div>
+            </div>
+          <% elsif controller_name != 'sessions' %>
+            <%= link_to(t(:log_in), new_user_session_path) %>
+          <% else %>
+            <%= link_to(t(:sign_up), new_user_registration_path) %>
+          <% end %>
+        </div>
 
-    <% if user_signed_in? %>
-      <%= render partial: 'sidebar' %>
-    <% end %>
+        <% if user_signed_in? %>
+          <%= render partial: 'sidebar' %>
+        <% end %>
+      </div>
 
-    <%= content_for?(:content) ? yield(:content) : yield %>
+      <%= content_for?(:content) ? yield(:content) : yield %>
+    </div>
   </body>
 </html>
