@@ -6,7 +6,7 @@
     <% end %>
 >
   <% list_set.lists.each do |list| %>
-    <div data-list-id="<%= list.id %>">
+    <div data-list-id="<%= list.id %>" class="hover:bg-green-100">
       <%= link_to(list.name, list) %>
       <% if list_set.user_managed %>
         <span class="handle">handle</span>

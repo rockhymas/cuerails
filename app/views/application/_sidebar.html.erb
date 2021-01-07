@@ -1,7 +1,15 @@
 <div id="sidebar" class="flex flex-col py-4 space-y-4 w-full">
-  <%= render partial: 'list_sets/plan_set', locals: { list_set: current_user.plan_list_set } %>
+  <%= render layout: 'list_sets/set', locals: { list_set: current_user.plan_list_set } do %>
+    <% if current_user.can_plan_day? %>
+      <%= link_to t(:plan_next_day), plan_next_day_path, method: :post %>
+    <% end %>
+  <% end %>
 
-  <%= render partial: 'list_sets/set', locals: { list_set: current_user.current_list_set, title: 'Current Lists' } %>
+  <%= render layout: 'list_sets/set', locals: { list_set: current_user.current_list_set, title: 'Current Lists' } do %>
+    <div>
+      <%= link_to(t(:new_list), current_new_list_path, method: :post) %>
+    </div>
+  <% end %>
 
   <div id="archive_lists" class="bg-white text-black p-2 border border-green-100 rounded divide-y divide-green-100">
     <div>Archive Lists</div>

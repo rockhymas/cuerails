@@ -3,11 +3,11 @@
       data-controller="update"
       data-update-name-value="ListSet"
       data-update-id-value="<%= list_set.id%>" >
-  <div><%=title%></div>
+  <% if local_assigns[:title] %>
+    <div><%=title%></div>
+  <% end %>
   <div id="list-set-contents-<%= list_set.id %>">
     <%= render partial: 'list_sets/items', locals: { list_set: list_set } %>
   </div>
-  <div>
-    <%= link_to(t(:new_list), current_new_list_path, method: :post) %>
-  </div>
+  <%= yield %>
 </div>
