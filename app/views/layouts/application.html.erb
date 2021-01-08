@@ -10,12 +10,12 @@
     <%= stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
-  <body class="bg-green-600 text-white font-sans sm:px-4 pt-4"
+  <body class="bg-green-600 font-sans sm:px-4 pt-4 text-base"
         data-controller="radiolabel" data-radiolabel-duration-value="2">
     <p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p>
 
-    <div class="flex flex-col sm:flex-row space-x-4 space-y-4">
+    <div class="flex flex-col sm:flex-row space-x-4 space-y-4 sm:space-y-0 items-start">
       <div class="flex-grow sm:flex-grow-0 px-4 sm:px-0 sm:w-60">
         <div class="relative">
           <%= link_to(root_path) do %>
