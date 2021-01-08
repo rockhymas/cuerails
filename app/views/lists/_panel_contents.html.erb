@@ -1,16 +1,18 @@
-<input type="text" id="list-title-<%=list.id%>"
-  class="disabled:bg-white"
-  <%= list.is_name_editable? ? "" : "disabled" %>
-  data-list-target="title"
-  data-action="input->list#rename keypress->list#keypress keydown->list#keydown blur->list#blur paste->list#paste"
-  data-reflex-dataset="combined"
-  value="<%= list.is_name_editable? ? list.editable_name : list.name %>"/>
+<div class="flex flex-row text-2xl px-4 pt-4">
+  <input type="text" id="list-title-<%=list.id%>"
+    class="flex-grow bg-transparent disabled:bg-transparent"
+    <%= list.is_name_editable? ? "" : "disabled" %>
+    data-list-target="title"
+    data-action="input->list#rename keypress->list#keypress keydown->list#keydown blur->list#blur paste->list#paste"
+    data-reflex-dataset="combined"
+    value="<%= list.is_name_editable? ? list.editable_name : list.name %>"/>
 
-<% if list == list.user.plan_list %>
-  <%= link_to t(:finish_planning), complete_plan_path, method: :post %>
-<% end %>
+  <% if list == list.user.plan_list %>
+    <%= link_to t(:finish_planning), complete_plan_path, method: :post %>
+  <% end %>
+</div>
 
-<div id="list-items-<%=list.id%>" data-list-target="items" data-controller="sortable" data-sortable-name-value="List" data-sortable-handle=".handle">
+<div id="list-items-<%=list.id%>" class="px-2" data-list-target="items" data-controller="sortable" data-sortable-name-value="List" data-sortable-handle=".handle">
   <% list.todos.each do |todo| %>
     <%= render partial: 'todos/entry', locals: { todo: todo } %>
   <% end %>

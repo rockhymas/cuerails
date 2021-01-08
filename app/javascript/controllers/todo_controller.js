@@ -57,7 +57,6 @@ export default class extends ApplicationController {
   delete() {
     this.debouncedRename.flush();
     this.stimulate('Todo#delete', this.deleteTarget);
-    // Velocity(this.element, {opacity: 0}, {display: "none"});
   }
 
   serverdelete(event) {
@@ -115,7 +114,7 @@ export default class extends ApplicationController {
     const row = this.element.nextElementSibling
     if (row) {
       row.querySelector("input[type='text']").focus();
-      Velocity(row, {backgroundColor: '#2d842f'}).then(Velocity(row, {backgroundColor: '#FFF'}));
+      // Velocity(row, {backgroundColor: '#2d842f'}).then(Velocity(row, {backgroundColor: '#FFF'}));
     }
   }
 
@@ -125,7 +124,7 @@ export default class extends ApplicationController {
       const input = row.querySelector("input[type='text']")
       if (input) {
         input.focus();
-        Velocity(row, {backgroundColor: '#2d842f'}).then(Velocity(row, {backgroundColor: '#FFF'}));
+        // Velocity(row, {backgroundColor: '#2d842f'}).then(Velocity(row, {backgroundColor: '#FFF'}));
         if (cursorAtEnd) {
           input.setSelectionRange(input.value.length, input.value.length);
         }

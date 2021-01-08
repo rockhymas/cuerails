@@ -79,9 +79,7 @@ export default class extends ApplicationController {
     const row = this.titleTarget.nextElementSibling
     if (row) {
       row.querySelector("input[type='text']").focus()
-      Velocity(row, { backgroundColor: '#2d842f' }).then(
-        Velocity(row, { backgroundColor: '#FFF' })
-      )
+      // Velocity(row, { backgroundColor: '#2d842f' }).then(Velocity(row, { backgroundColor: '#FFF' }));
     }
   }
 
