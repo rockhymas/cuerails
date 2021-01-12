@@ -11,6 +11,8 @@ export default class extends ApplicationController {
     this.debouncedRename = debounce(() => {
       this.renaming = true;
       this.stimulate('Todo#rename', this.titleTarget);
+      console.log('renaming on server');
+      this.renamedName = null;
     }, 1000);
   }
 
@@ -27,6 +29,17 @@ export default class extends ApplicationController {
       delete this.titleTarget.dataset.pendingRename;
       this.titleTarget.classList.remove('pendingRename');
     }
+    if (this.titleTarget.value === '') {
+      this.checkboxTarget.classList.remove('border');
+    }
+    else {
+      this.checkboxTarget.classList.add('border');
+    }
+    console.log('rename');
+    if (this.renaming) {
+      this.renamedName = this.titleTarget.value;
+    }
+
     this.debouncedRename();
   }
 
@@ -42,6 +55,13 @@ export default class extends ApplicationController {
     }
 
     this.renaming = false;
+    console.log('done renaming');
+  }
+
+  finalizeRename() {
+    if (this.renamedName !== null) {
+      this.titleTarget.value = this.renamedName;
+    }
   }
 
   blur() {
@@ -96,7 +116,7 @@ export default class extends ApplicationController {
 
   clickHandle() {
     if (this.optionsTarget.style.display === 'none') {
-      Velocity(this.optionsTarget, 'slideDown');
+      Velocity(this.optionsTarget, 'slideDown', { display: "" });
     } else {
       Velocity(this.optionsTarget, 'slideUp');
     }

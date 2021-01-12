@@ -1,6 +1,6 @@
 <div class="flex flex-row text-2xl px-4 pt-4">
   <input type="text" id="list-title-<%=list.id%>"
-    class="flex-grow bg-transparent disabled:bg-transparent"
+    class="flex-grow bg-transparent disabled:bg-transparent p-1 rounded focus:outline-none focus:ring-green-600 focus:ring-2"
     <%= list.is_name_editable? ? "" : "disabled" %>
     data-list-target="title"
     data-action="input->list#rename keypress->list#keypress keydown->list#keydown blur->list#blur paste->list#paste"
@@ -8,7 +8,7 @@
     value="<%= list.is_name_editable? ? list.editable_name : list.name %>"/>
 
   <% if list == list.user.plan_list %>
-    <%= link_to t(:finish_planning), complete_plan_path, method: :post %>
+    <%= link_to t(:finish_planning), complete_plan_path, class: "bg-green-600 rounded px-3 text-white border-4 border-transparent hover:bg-green-100", method: :post %>
   <% end %>
 </div>
 
