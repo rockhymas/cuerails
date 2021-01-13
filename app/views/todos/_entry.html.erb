@@ -2,7 +2,7 @@
     class="flex flex-col space-y-2"
     data-controller="todo"
     data-todo-id="<%= todo.id%>"
-    data-action="deleteTodo->todo#serverdelete"
+    data-action="deleteTodo->todo#serverdelete rename->todo#serverRename"
     data-reflex-dataset="combined">
   <%= render partial: 'todos/entry_contents', locals: { todo: todo } %>
 </div>

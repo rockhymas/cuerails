@@ -29,7 +29,7 @@ class TodoReflex < ApplicationReflex
 
     morph :nothing
     cable_ready[ListChannel]
-      .morph(selector: "#todo-row-#{todo.id}", html: render(partial: "todos/entry_contents", locals: { todo: todo }), children_only: true)
+      .dispatch_event(name: "rename", selector: "#todo-row-#{todo.id}", detail: { title: todo.title, initiator: element.dataset["initiator"]})
       .broadcast_to(todo.list)
   end
 
