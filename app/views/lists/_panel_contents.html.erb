@@ -3,7 +3,7 @@
     class="flex-grow bg-transparent disabled:bg-transparent p-1 rounded focus:outline-none focus:ring-green-600 focus:ring-2"
     <%= list.is_name_editable? ? "" : "disabled" %>
     data-list-target="title"
-    data-action="input->list#rename keypress->list#keypress keydown->list#keydown blur->list#blur paste->list#paste"
+    data-action="input->list#rename keypress->list#insertOnEnter keydown->list#keydown blur->list#blur paste->list#paste"
     data-reflex-dataset="combined"
     value="<%= list.is_name_editable? ? list.editable_name : list.name %>"/>
 
@@ -16,4 +16,8 @@
   <% list.todos.each do |todo| %>
     <%= render partial: 'todos/entry', locals: { todo: todo } %>
   <% end %>
+</div>
+
+<div id="todo-template" class="hidden">
+  <%= render partial: 'todos/entry', locals: { todo: Todo.new } %>
 </div>

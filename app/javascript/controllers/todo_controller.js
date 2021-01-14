@@ -70,14 +70,6 @@ export default class extends ApplicationController {
     }.bind(this)});
   }
 
-  keypress(e) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      this.inserting = true;
-      this.stimulate('Todo#insertAfter', this.element);
-    }
-  }
-
   keydown(e) {
     if (e.key === 'ArrowDown') {
       e.preventDefault();

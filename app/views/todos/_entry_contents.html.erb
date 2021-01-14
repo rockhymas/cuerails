@@ -1,6 +1,6 @@
 <div class="flex flex-row items-center space-x-2">
   <%= check_box_tag "todo-#{todo.id}", "", todo.complete, class: "appearance-none focus:outline-none focus:ring-green-600 focus:ring-2 h-6 w-6 text-green-600 border-green-100 rounded" + (todo.title.blank? ? "" : " border"), data: { "todo-target": "checkbox", action: "change->todo#complete", "reflex-dataset": "combined" } %>
-  <%= text_field_tag "todo-title-#{todo.id}", todo.title, class: "flex-grow focus:outline-none focus:ring-green-600 focus:ring-2 my-0.5 p-0.5", data: { "todo-target": "title", action: "input->todo#rename keypress->todo#keypress keydown->todo#keydown blur->todo#blur", "reflex-dataset": "combined" } %>
+  <%= text_field_tag "todo-title-#{todo.id}", todo.title, class: "flex-grow focus:outline-none focus:ring-green-600 focus:ring-2 my-0.5 p-0.5", data: { "todo-target": "title", action: "input->todo#rename keydown->todo#keydown blur->todo#blur keypress->list#insertOnEnter:capture", "reflex-dataset": "combined" } %>
   <%= content_tag :span, class: "handle", data: { "todo-target": "handle", action: "click->todo#clickHandle" } do %>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 297 297" width="24" height="24" class="fill-current text-green-600">
       <g>

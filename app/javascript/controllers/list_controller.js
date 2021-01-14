@@ -58,12 +58,20 @@ export default class extends ApplicationController {
     window.document.execCommand('insertText', false, text)
   }
 
-  keypress = e => {
+  insertOnEnter= e => {
     if (e.key === 'Enter') {
       e.preventDefault()
-      this.inserting = true
-      this.stimulate('List#insertTodo', this.element)
-      this.titleTarget.blur()
+      this.inserting = true;
+      this.stimulate('List#insertTodo', e.target);
+      // generate html for new todo, data-todo-uuid = uuid, data-todo-id=new, id=todo-row-uuid
+      // what about id's for child elements that use the todo.id?
+      // Make todo_controller.js/todo_reflex.rb handle uuid, when they exist, across all methods
+      // Probably just prevent reflexes (rename/check/pin/delete) until todo.id is set
+      // stimulate('List#insertAfter', todo-id, new uuid)
+      // ^-- handler will hook up the new id once the todo is created
+      // afterInsertAfter will update the new todo with anything that happened while waiting, i.e. rename
+      //   and also do a stimulate that triggers cable ready updates for all other clients
+
     }
   }
 
