@@ -18,6 +18,6 @@
   <% end %>
 </div>
 
-<div id="todo-template" class="hidden">
+<div class="hidden" data-list-target="template">
   <%= render partial: 'todos/entry', locals: { todo: Todo.new } %>
 </div>

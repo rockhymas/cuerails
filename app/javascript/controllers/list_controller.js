@@ -2,7 +2,7 @@ import ApplicationController from './application_controller'
 import debounce from 'lodash/debounce'
 
 export default class extends ApplicationController {
-  static targets = ['title', 'items']
+  static targets = ['title', 'items', 'template']
 
   connect () {
     super.connect()
@@ -60,9 +60,17 @@ export default class extends ApplicationController {
 
   insertOnEnter= e => {
     if (e.key === 'Enter') {
-      e.preventDefault()
-      this.inserting = true;
-      this.stimulate('List#insertTodo', e.target);
+      e.preventDefault();
+      let todoNode = this.templateTarget.querySelector('[data-controller]').cloneNode(true);
+      let controller = e.target.closest('[data-controller]');
+      console.log(controller);
+      console.log(todoNode);
+      controller.insertAdjacentElement('afterend', todoNode);
+      todoNode.querySelector("input[type='text']").focus();
+
+      // this.inserting = true;
+      // this.stimulate('List#insertTodo', e.target);
+
       // generate html for new todo, data-todo-uuid = uuid, data-todo-id=new, id=todo-row-uuid
       // what about id's for child elements that use the todo.id?
       // Make todo_controller.js/todo_reflex.rb handle uuid, when they exist, across all methods
