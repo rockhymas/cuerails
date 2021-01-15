@@ -61,8 +61,8 @@ export default class extends ApplicationController {
   insertOnEnter= e => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      let todoNode = this.templateTarget.querySelector('[data-controller]').cloneNode(true);
-      let controller = e.target.closest('[data-controller]');
+      let todoNode = this.templateTarget.querySelector('[data-controller*="todo"]').cloneNode(true);
+      let controller = e.target.closest('[data-controller*="todo"]');
       console.log(controller);
       console.log(todoNode);
       controller.insertAdjacentElement('afterend', todoNode);
