@@ -102,14 +102,6 @@ export default class extends ApplicationController {
     }
   }
 
-  afterInsertAfter() {
-    if (this.inserting) {
-      this.focusNextTodo();
-    }
-
-    this.inserting = false;
-  }
-
   focusNextTodo() {
     const row = this.element.nextElementSibling
     if (row) {
