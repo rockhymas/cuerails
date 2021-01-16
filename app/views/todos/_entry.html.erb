@@ -1,4 +1,4 @@
-<div id="todo-row-<%= todo.id %>"
+<div id="<%=dom_id(todo)%>"
     class="flex flex-col space-y-2"
     data-controller="todo"
     data-todo-id="<%= todo.id%>"

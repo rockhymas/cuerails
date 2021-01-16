@@ -8,7 +8,7 @@ class TodoReflex < ApplicationReflex
 
     morph :nothing
     cable_ready[ListChannel]
-      .morph(selector: "#todo-row-#{todo.id}", html: render(partial: "todos/entry_contents", locals: { todo: todo }), children_only: true)
+      .morph(selector: "##{dom_id(todo)}", html: render(partial: "todos/entry_contents", locals: { todo: todo }), children_only: true)
       .broadcast_to(todo.list)
   end
 
@@ -18,7 +18,7 @@ class TodoReflex < ApplicationReflex
 
     morph :nothing
     cable_ready[ListChannel]
-      .morph(selector: "#todo-options-#{todo.id}", html: render(partial: "todos/options", locals: { todo: todo }), children_only: true)
+      .morph(selector: "##{dom_id(todo, "options")}", html: render(partial: "todos/options", locals: { todo: todo }), children_only: true)
       .broadcast_to(todo.list)
   end
 
@@ -29,13 +29,13 @@ class TodoReflex < ApplicationReflex
 
     morph :nothing
     cable_ready[ListChannel]
-      .dispatch_event(name: "rename", selector: "#todo-row-#{todo.id}", detail: { title: todo.title, initiator: element.dataset["initiator"]})
+      .dispatch_event(name: "rename", selector: "##{dom_id(todo)}", detail: { title: todo.title, initiator: element.dataset["initiator"]})
       .broadcast_to(todo.list)
   end
 
   def forceUpdate
     todo = Todo.find(element.dataset["todo-id"])
-    morph "#todo-row-#{todo.id}", render(partial: "todos/entry", locals: { todo: todo })
+    morph "##{dom_id(todo)}", render(partial: "todos/entry", locals: { todo: todo })
   end
 
   def delete
@@ -48,7 +48,7 @@ class TodoReflex < ApplicationReflex
       todo.save
       morph :nothing
       cable_ready[ListChannel]
-        .morph(selector: "#todo-row-#{todo.id}", html: render(partial: "todos/entry_contents", locals: { todo: todo }), children_only: true)
+        .morph(selector: "##{dom_id(todo)}", html: render(partial: "todos/entry_contents", locals: { todo: todo }), children_only: true)
         .broadcast_to(todo.list)
       return
     end
@@ -57,7 +57,7 @@ class TodoReflex < ApplicationReflex
     
     morph :nothing
     cable_ready[ListChannel]
-      .dispatch_event(name: 'deleteTodo', selector: "#todo-row-#{todoId}")
+      .dispatch_event(name: 'deleteTodo', selector: "##{dom_id(todo)}")
       .broadcast_to(list)
   end
 

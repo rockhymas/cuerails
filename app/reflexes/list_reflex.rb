@@ -71,7 +71,7 @@ class ListReflex < ApplicationReflex
       .broadcast_to(list)
     if !todoPinned
       cable_ready[ListChannel]
-        .dispatch_event(name: 'deleteTodo', selector: "#todo-row-#{todo_id}")
+        .dispatch_event(name: 'deleteTodo', selector: "##{dom_id(todo)}")
         .broadcast_to(old_list)
     end
   end
