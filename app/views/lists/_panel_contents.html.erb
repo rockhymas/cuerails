@@ -1,5 +1,5 @@
 <div class="flex flex-row text-2xl px-4 pt-4">
-  <input type="text" id="list-title-<%=list.id%>"
+  <input type="text" id="<%=dom_id(list, 'title')%>"
     class="flex-grow bg-transparent disabled:bg-transparent p-1 rounded focus:outline-none focus:ring-green-600 focus:ring-2"
     <%= list.is_name_editable? ? "" : "disabled" %>
     data-list-target="title"
@@ -12,7 +12,7 @@
   <% end %>
 </div>
 
-<div id="list-items-<%=list.id%>" class="px-2" data-list-target="items" data-controller="sortable" data-sortable-name-value="List" data-sortable-handle=".handle">
+<div id="<%=dom_id(list, 'items')%>" class="px-2" data-list-target="items" data-controller="sortable" data-sortable-name-value="List" data-sortable-handle=".handle">
   <% list.todos.each do |todo| %>
     <%= render partial: 'todos/entry', locals: { todo: todo } %>
   <% end %>

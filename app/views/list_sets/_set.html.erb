@@ -1,12 +1,12 @@
-<div id="list-set-<%=list_set.id%>"
+<div id="<%=dom_id(list_set)%>"
       class="bg-white text-black p-2 border border-green-100 rounded"
       data-controller="update"
       data-update-name-value="ListSet"
-      data-update-id-value="<%= list_set.id%>" >
+      data-update-id-value="<%=list_set.id%>" >
   <% if local_assigns[:title] %>
     <div><%=title%></div>
   <% end %>
-  <div id="list-set-contents-<%= list_set.id %>">
+  <div id="<%=dom_id(list_set, 'contents')%>">
     <%= render partial: 'list_sets/items', locals: { list_set: list_set } %>
   </div>
   <%= yield %>

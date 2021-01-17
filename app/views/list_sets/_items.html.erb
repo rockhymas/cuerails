@@ -1,4 +1,4 @@
-<div id="list-set-items-<%=list_set.id%>"
+<div id="<%=dom_id(list_set, 'items')%>"
     <% if list_set.user_managed %>
       data-controller="sortable"
       data-sortable-name-value="ListSet"
