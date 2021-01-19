@@ -61,15 +61,26 @@ export default class extends ApplicationController {
   insertOnEnter= e => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      let todoNode = this.templateTarget.querySelector('[data-controller*="todo"]').cloneNode(true);
+      this.inserting = true;
+      // this.stimulate('List#insertTodo', e.target);
+
+      let templateNode = this.templateTarget.cloneNode(true);
       let controller = e.target.closest('[data-controller*="todo"]');
-      console.log(controller);
-      console.log(todoNode);
-      controller.insertAdjacentElement('afterend', todoNode);
-      todoNode.querySelector("input[type='text']").focus();
+
+      templateNode.classList.remove('hidden');
+      delete templateNode.dataset.listTarget
+      templateNode.dataset.newTodoAfterValue = controller.dataset.todoId // TODO: What if dataset.todoId doesn't exist, because controller is a new todo?
+      controller.insertAdjacentElement("afterend", templateNode);
+
+      // let todoNode = this.templateTarget.querySelector('[data-controller*="new-todo"]').cloneNode(true);
+      // let controller = e.target.closest('[data-controller*="todo"]');
+      // console.log(controller);
+      // console.log(todoNode);
+      // controller.insertAdjacentElement('afterend', todoNode);
+      // todoNode.querySelector("input[type='text']").focus();
 
       // this.inserting = true;
-      // this.stimulate('List#insertTodo', e.target);
+      // this.stimulate('List#newTodo', e.target);
 
       // generate html for new todo, data-todo-uuid = uuid, data-todo-id=new, id=todo-row-uuid
       // what about id's for child elements that use the todo.id?
@@ -84,9 +95,9 @@ export default class extends ApplicationController {
   }
 
   afterInsertTodo = () => {
-    if (this.inserting) {
-      this.focusNextTodo()
-    }
+    // if (this.inserting) {
+    //   this.focusNextTodo()
+    // }
 
     this.inserting = false
   }

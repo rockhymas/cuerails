@@ -26,6 +26,7 @@ class ListReflex < ApplicationReflex
   def insertTodo
     position = 0
     list = List.find(element.dataset["list-id"])
+    todo = nil
     if element.dataset["todo-id"]
       todo = Todo.find(element.dataset["todo-id"])
       position = todo.position + 1
@@ -34,10 +35,27 @@ class ListReflex < ApplicationReflex
     new_todo = Todo.create(list: list, position: position)
     new_todo.save
 
-    # morph :nothing
-    # cable_ready[ListChannel]
-    #   .insert_adjacent_html(selector: "#list-items-#{list.id}", position: :afterbegin, html: render(partial: "todos/entry", locals: { todo: new_todo }))
-    #   .broadcast_to(list)
+    morph :nothing
+    if todo.present?
+      cable_ready[ListChannel]
+        .insert_adjacent_html(selector: "##{dom_id(todo)}", position: :afterend, html: render(partial: "todos/entry", locals: { todo: new_todo }))
+        .broadcast_to(list)
+    else
+      cable_ready[ListChannel]
+        .insert_adjacent_html(selector: "##{dom_id(list, 'items')}", position: :afterbegin, html: render(partial: "todos/entry", locals: { todo: new_todo }))
+        .broadcast_to(list)
+    end
+  end
+
+  def newTodo(uuid, after_todo_id)
+    position = 0
+    if (after_todo_id.present?)
+      position = Todo.find(after_todo_id).position + 1
+    end
+    list = List.find(element.dataset["list-id"])
+
+    new_todo = Todo.create(list: list, position: position)
+    morph "#a#{uuid}", render(partial: "todos/entry", locals: { todo: new_todo })
   end
 
   def positionItem(new_index)
