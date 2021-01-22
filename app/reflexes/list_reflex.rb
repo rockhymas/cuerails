@@ -9,12 +9,12 @@ class ListReflex < ApplicationReflex
 
     morph :nothing
     cable_ready[ListChannel]
-      .morph(selector: "##{dom_id(list)}", html: render(partial: "lists/panel_contents", locals: { list: list }), children_only: true)
+      .morph(selector: dom_id(list), html: render(partial: "lists/panel_contents", locals: { list: list }), children_only: true)
       .broadcast_to(list)
 
     if list.list_set.present?
       cable_ready[ListSetChannel]
-        .morph(selector: "##{dom_id(list.list_set)}", html: render(partial: "list_sets/items", locals: { list_set: list.list_set }), children_only: true)
+        .morph(selector: dom_id(list.list_set), html: render(partial: "list_sets/items", locals: { list_set: list.list_set }), children_only: true)
         .broadcast_to(list.list_set)
     end
   end
@@ -38,11 +38,11 @@ class ListReflex < ApplicationReflex
     morph :nothing
     if todo.present?
       cable_ready[ListChannel]
-        .insert_adjacent_html(selector: "##{dom_id(todo)}", position: :afterend, html: render(partial: "todos/entry", locals: { todo: new_todo }))
+        .insert_adjacent_html(selector: dom_id(todo), position: :afterend, html: render(partial: "todos/entry", locals: { todo: new_todo }))
         .broadcast_to(list)
     else
       cable_ready[ListChannel]
-        .insert_adjacent_html(selector: "##{dom_id(list, 'items')}", position: :afterbegin, html: render(partial: "todos/entry", locals: { todo: new_todo }))
+        .insert_adjacent_html(selector: dom_id(list, 'items'), position: :afterbegin, html: render(partial: "todos/entry", locals: { todo: new_todo }))
         .broadcast_to(list)
     end
   end
@@ -65,7 +65,7 @@ class ListReflex < ApplicationReflex
 
     morph :nothing
     cable_ready[ListChannel]
-      .morph(selector: "##{dom_id(todo.list)}", html: render(partial: "lists/panel_contents", locals: { list: todo.list }), children_only: true)
+      .morph(selector: dom_id(todo.list), html: render(partial: "lists/panel_contents", locals: { list: todo.list }), children_only: true)
       .broadcast_to(todo.list)
   end
 
@@ -85,11 +85,11 @@ class ListReflex < ApplicationReflex
 
     morph :nothing
     cable_ready[ListChannel]
-      .morph(selector: "##{dom_id(list)}", html: render(partial: "lists/panel_contents", locals: { list: list }), children_only: true)
+      .morph(selector: dom_id(list), html: render(partial: "lists/panel_contents", locals: { list: list }), children_only: true)
       .broadcast_to(list)
     if !todoPinned
       cable_ready[ListChannel]
-        .dispatch_event(name: 'deleteTodo', selector: "##{dom_id(todo)}")
+        .dispatch_event(name: 'deleteTodo', selector: dom_id(todo))
         .broadcast_to(old_list)
     end
   end

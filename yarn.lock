@@ -1741,10 +1741,9 @@ bytes@3.1.0, bytes@^3.0.0:
   resolved "https://registry.yarnpkg.com/bytes/-/bytes-3.1.0.tgz#f6cf7933a360e0588fa9fde85651cdc7f805d1f6"
   integrity sha512-zauLjrfCG+xvoyaqLoV8bLVXXNGC4JqlxFCutSDWA6fJrTo2ZuvLYTqZ7aHBLZSMOopbzwv8f+wZcVzfVTI2Dg==
 
-"cable_ready@>= 4.4":
-  version "4.4.3"
-  resolved "https://registry.yarnpkg.com/cable_ready/-/cable_ready-4.4.3.tgz#eada6f43c471f9afc7b08df49b000f27d9b2cb66"
-  integrity sha512-yp2JeCOvFLxIAdEa8jGa+ydZrlk1++ClK95OfCl/HrQXJ5p0PwNFGxDmgz2zqSMM1JM5p87JDw3QNsQD71NkCw==
+"cable_ready@>= 4.4.6", cable_ready@hopsoft/cable_ready#master:
+  version "4.4.6"
+  resolved "https://codeload.github.com/hopsoft/cable_ready/tar.gz/a3a92f1b9b0475f6e6edcaea7eef054d97832180"
   dependencies:
     morphdom "^2.6.1"
 
@@ -7104,13 +7103,12 @@ stimulus@^2.0.0:
     "@stimulus/core" "^2.0.0"
     "@stimulus/webpack-helpers" "^2.0.0"
 
-stimulus_reflex@^3.4.0-pre9:
-  version "3.4.0-pre9"
-  resolved "https://registry.yarnpkg.com/stimulus_reflex/-/stimulus_reflex-3.4.0-pre9.tgz#acad837ea8598c23f1dac41b438938d575f38da2"
-  integrity sha512-qWBkqbVHoTfmASMMMnkTCvZ5lAcRmaEoeUKsBVIjVAdhxvNqS5qoXQYouJHHwcE6G0x5tZ5DvydcBisFom/g8w==
+stimulus_reflex@hopsoft/stimulus_reflex#master:
+  version "3.4.0"
+  resolved "https://codeload.github.com/hopsoft/stimulus_reflex/tar.gz/68f2b55edefe50922e1504e016b79e361add9d19"
   dependencies:
     "@rails/actioncable" ">= 6.0"
-    cable_ready ">= 4.4"
+    cable_ready ">= 4.4.6"
 
 stream-browserify@^2.0.1:
   version "2.0.2"

@@ -57,7 +57,7 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-gem "cable_ready", "~> 4.4.5"
+gem "cable_ready",github: "hopsoft/cable_ready", branch: "master"
 gem "stimulus_reflex", github: "hopsoft/stimulus_reflex", branch: "master"
 
 gem 'acts_as_list'

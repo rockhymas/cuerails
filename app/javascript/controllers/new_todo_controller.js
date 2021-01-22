@@ -48,6 +48,7 @@ export default class extends ApplicationController {
     title.value = title_text;
     title.dispatchEvent(new Event('input'));
     title.focus();
+    replacement.dispatchEvent(new Event('created'));
   }
 
   complete(event) {

@@ -8,7 +8,7 @@ class TodoReflex < ApplicationReflex
 
     morph :nothing
     cable_ready[ListChannel]
-      .morph(selector: "##{dom_id(todo)}", html: render(partial: "todos/entry_contents", locals: { todo: todo }), children_only: true)
+      .morph(selector: dom_id(todo), html: render(partial: "todos/entry_contents", locals: { todo: todo }), children_only: true)
       .broadcast_to(todo.list)
   end
 
@@ -18,7 +18,7 @@ class TodoReflex < ApplicationReflex
 
     morph :nothing
     cable_ready[ListChannel]
-      .morph(selector: "##{dom_id(todo, "options")}", html: render(partial: "todos/options", locals: { todo: todo }), children_only: true)
+      .morph(selector: dom_id(todo, "options"), html: render(partial: "todos/options", locals: { todo: todo }), children_only: true)
       .broadcast_to(todo.list)
   end
 
@@ -29,13 +29,24 @@ class TodoReflex < ApplicationReflex
 
     morph :nothing
     cable_ready[ListChannel]
-      .dispatch_event(name: "rename", selector: "##{dom_id(todo)}", detail: { title: todo.title, initiator: element.dataset["initiator"]})
+      .morph(selector: dom_id(todo), html: render(partial: "todos/entry_contents", locals: { todo: todo }), children_only: true, exemptId: element.dataset["crap-id-value"])
       .broadcast_to(todo.list)
+  end
+
+  def creationComplete
+    todo = Todo.find(element.dataset["todo-id"])
+    prev_todo = todo.higher_item
+    morph :nothing
+    if prev_todo.present?
+      cable_ready[ListChannel]
+        .insert_adjacent_html(selector: dom_id(prev_todo), position: :afterend, html: render(partial: "todos/entry", locals: { todo: todo }), exemptId: element.dataset["crap-id-value"])
+        .broadcast_to(todo.list)
+    end
   end
 
   def forceUpdate
     todo = Todo.find(element.dataset["todo-id"])
-    morph "##{dom_id(todo)}", render(partial: "todos/entry", locals: { todo: todo })
+    morph dom_id(todo), render(partial: "todos/entry", locals: { todo: todo })
   end
 
   def delete
@@ -48,7 +59,7 @@ class TodoReflex < ApplicationReflex
       todo.save
       morph :nothing
       cable_ready[ListChannel]
-        .morph(selector: "##{dom_id(todo)}", html: render(partial: "todos/entry_contents", locals: { todo: todo }), children_only: true)
+        .morph(selector: dom_id(todo), html: render(partial: "todos/entry_contents", locals: { todo: todo }), children_only: true)
         .broadcast_to(todo.list)
       return
     end
@@ -57,7 +68,7 @@ class TodoReflex < ApplicationReflex
     
     morph :nothing
     cable_ready[ListChannel]
-      .dispatch_event(name: 'deleteTodo', selector: "##{dom_id(todo)}")
+      .dispatch_event(name: 'deleteTodo', selector: dom_id(todo))
       .broadcast_to(list)
   end
 

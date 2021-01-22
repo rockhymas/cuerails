@@ -2,16 +2,6 @@ import Velocity from 'velocity-animate'
 import ApplicationController from './application_controller'
 import debounce from 'lodash/debounce'
 
-const uuidv4 = () => {
-  const crypto = window.crypto || window.msCrypto
-  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
-    (
-      c ^
-      (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-    ).toString(16)
-  )
-}
-
 export default class extends ApplicationController {
   static targets = [ "checkbox", 'title', 'delete', 'handle', 'options', 'pinned' ]
 
@@ -19,7 +9,6 @@ export default class extends ApplicationController {
     super.connect()
 
     this.debouncedRename = debounce(() => {
-      this.titleTarget.dataset.initiator = uuidv4();
       this.stimulate('Todo#rename', this.titleTarget);
     }, 2000);
   }
@@ -30,6 +19,10 @@ export default class extends ApplicationController {
 
   togglePin(event) {
     this.stimulate('Todo#togglePin', this.pinnedTarget);
+  }
+
+  created() {
+    this.stimulate('Todo#creationComplete');
   }
 
   rename() {
@@ -46,15 +39,6 @@ export default class extends ApplicationController {
     }
   }
 
-  serverRename(e) {
-    if (e.detail.initiator === this.titleTarget.dataset.initiator) {
-      delete this.titleTarget.dataset.initiator;
-    } else {
-      this.titleTarget.value = e.detail.title;
-      this.onRename();
-    }
-  }
-
   blur() {
     this.debouncedRename.flush();
   }
@@ -67,7 +51,7 @@ export default class extends ApplicationController {
     }
   }
 
-  serverdelete(event) {
+  serverdelete() {
     Velocity(this.element, {opacity: 0}, {display: "none", complete: function() {
       this.element.remove();
     }.bind(this)});
