@@ -49,13 +49,25 @@ class ListReflex < ApplicationReflex
 
   def newTodo(uuid, after_todo_id)
     position = 0
+    prev_todo = nil
     if (after_todo_id != -1)
-      position = Todo.find(after_todo_id).position + 1
+      prev_todo = Todo.find(after_todo_id)
+      position = prev_todo.position + 1
     end
     list = List.find(element.dataset["list-id"])
 
     new_todo = Todo.create(list: list, position: position)
     morph "#a#{uuid}", render(partial: "todos/entry", locals: { todo: new_todo })
+
+    if prev_todo.present?
+      cable_ready[ListChannel]
+        .insert_adjacent_html(selector: dom_id(prev_todo), position: :afterend, html: render(partial: "todos/entry", locals: { todo: new_todo }), exemptId: element.dataset["crap-id-value"])
+        .broadcast_to(list)
+    else
+      cable_ready[ListChannel]
+        .insert_adjacent_html(selector: dom_id(list, 'items'), position: :afterbegin, html: render(partial: "todos/entry", locals: { todo: new_todo }), exemptId: element.dataset["crap-id-value"])
+        .broadcast_to(list)
+    end
   end
 
   def positionItem(new_index)

@@ -33,21 +33,6 @@ class TodoReflex < ApplicationReflex
       .broadcast_to(todo.list)
   end
 
-  def creationComplete
-    todo = Todo.find(element.dataset["todo-id"])
-    prev_todo = todo.higher_item
-    morph :nothing
-    if prev_todo.present?
-      cable_ready[ListChannel]
-        .insert_adjacent_html(selector: dom_id(prev_todo), position: :afterend, html: render(partial: "todos/entry", locals: { todo: todo }), exemptId: element.dataset["crap-id-value"])
-        .broadcast_to(todo.list)
-    else
-      cable_ready[ListChannel]
-        .insert_adjacent_html(selector: dom_id(todo.list, 'items'), position: :afterbegin, html: render(partial: "todos/entry", locals: { todo: todo }), exemptId: element.dataset["crap-id-value"])
-        .broadcast_to(todo.list)
-    end
-  end
-
   def forceUpdate
     todo = Todo.find(element.dataset["todo-id"])
     morph dom_id(todo), render(partial: "todos/entry", locals: { todo: todo })

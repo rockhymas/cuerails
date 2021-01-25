@@ -63,7 +63,6 @@ export default class extends ApplicationController {
     if (focus) {
       title.focus();
     }
-    replacement.dispatchEvent(new Event('created'));
   }
 
   complete(event) {

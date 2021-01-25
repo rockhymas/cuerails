@@ -21,10 +21,6 @@ export default class extends ApplicationController {
     this.stimulate('Todo#togglePin', this.pinnedTarget);
   }
 
-  created() {
-    this.stimulate('Todo#creationComplete');
-  }
-
   rename() {
     this.onRename();
     this.debouncedRename();
