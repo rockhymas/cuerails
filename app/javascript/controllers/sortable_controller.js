@@ -27,7 +27,7 @@ export default class extends ApplicationController {
   }
 
   dragEnd = event => {
-    if (event.from === event.to) {
+    if (event.from === event.to && event.newIndex !== event.oldIndex) {
       this.stimulate(this.nameValue + '#positionItem', event.item, event.newIndex)
     } else {
       // handled by the dragAdd method

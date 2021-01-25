@@ -87,23 +87,21 @@ class ListReflex < ApplicationReflex
     old_list = todo.list
     list = List.find(element.dataset["list-id"])
 
-    new_todo = Todo.create(list_id: list.id, title: todo.title, position: new_index + 1)
+    new_todo = Todo.create(list: list, title: todo.title, position: new_index + 1)
     new_todo.save
 
-    todoPinned = todo.pinned
-    if !todoPinned
+    if !todo.pinned
+      cable_ready[ListChannel]
+        .remove(selector: dom_id(todo))
+        .broadcast_to(old_list)
       todo.destroy
     end
 
     morph :nothing
+    # TODO: Can we make this an insert_adjacent, with exemption? Or user the newTodo flow?
     cable_ready[ListChannel]
       .morph(selector: dom_id(list), html: render(partial: "lists/panel_contents", locals: { list: list }), children_only: true)
       .broadcast_to(list)
-    if !todoPinned
-      cable_ready[ListChannel]
-        .dispatch_event(name: 'deleteTodo', selector: dom_id(todo))
-        .broadcast_to(old_list)
-    end
   end
 
 end
