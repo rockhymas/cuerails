@@ -8,43 +8,16 @@ export default class extends ApplicationController {
     super.connect()
 
     this.debouncedRename = debounce(() => {
-      this.renaming = true
       this.stimulate('List#rename', this.titleTarget)
     }, 1000)
   }
 
   rename = () => {
-    if (this.titleTarget.dataset.pendingRename) {
-      delete this.titleTarget.dataset.pendingRename
-      this.titleTarget.classList.remove('pendingRename')
-    }
     this.debouncedRename()
-  }
-
-  afterRename = () => {
-    if (this.titleTarget === document.activeElement && !this.renaming) {
-      if (!document.hasFocus()) {
-        this.titleTarget.blur()
-        this.stimulate('List#forceUpdate')
-      } else {
-        this.titleTarget.dataset.pendingRename = this.titleTarget.value
-        this.titleTarget.classList.add('pendingRename')
-      }
-    }
-
-    this.renaming = false
   }
 
   blur = () => {
     this.debouncedRename.flush()
-    if (
-      this.titleTarget.dataset.pendingRename &&
-      this.titleTarget.dataset.pendingRename == this.titleTarget.value
-    ) {
-      delete this.titleTarget.dataset.pendingRename
-      this.stimulate('List#forceUpdate')
-      this.titleTarget.classList.remove('pendingRename')
-    }
   }
 
   paste = event => {

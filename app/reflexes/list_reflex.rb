@@ -3,14 +3,13 @@
 class ListReflex < ApplicationReflex
 
   def rename
-    # TODO: clean up with exemptions
     list = List.find(element.dataset["list-id"])
     list.title = element.value
     list.save
 
     morph :nothing
     cable_ready[ListChannel]
-      .morph(selector: dom_id(list), html: render(partial: "lists/panel_contents", locals: { list: list }), children_only: true)
+      .morph(selector: dom_id(list, 'header'), html: render(partial: "lists/panel_header", locals: { list: list }), children_only: true, exemptId: element.dataset["crap-id-value"])
       .broadcast_to(list)
 
     if list.list_set.present?
@@ -18,10 +17,6 @@ class ListReflex < ApplicationReflex
         .morph(selector: dom_id(list.list_set), html: render(partial: "list_sets/items", locals: { list_set: list.list_set }), children_only: true)
         .broadcast_to(list.list_set)
     end
-  end
-
-  def forceUpdate
-    list = List.find(element.dataset["list-id"])
   end
 
   def newTodo(uuid, after_todo_id)
