@@ -8,7 +8,7 @@ class TodoReflex < ApplicationReflex
 
     morph :nothing
     cable_ready[ListChannel]
-      .morph(selector: dom_id(todo), html: render(partial: "todos/entry_contents", locals: { todo: todo }), children_only: true)
+      .morph(selector: dom_id(todo), html: render(partial: "todos/entry_contents", locals: { todo: todo }), children_only: true, exemptId: element.dataset["crap-id-value"])
       .broadcast_to(todo.list)
   end
 
@@ -18,7 +18,7 @@ class TodoReflex < ApplicationReflex
 
     morph :nothing
     cable_ready[ListChannel]
-      .morph(selector: dom_id(todo, "options"), html: render(partial: "todos/options", locals: { todo: todo }), children_only: true)
+      .morph(selector: dom_id(todo, "options"), html: render(partial: "todos/options", locals: { todo: todo }), children_only: true, exemptId: element.dataset["crap-id-value"])
       .broadcast_to(todo.list)
   end
 
@@ -31,11 +31,6 @@ class TodoReflex < ApplicationReflex
     cable_ready[ListChannel]
       .morph(selector: dom_id(todo), html: render(partial: "todos/entry_contents", locals: { todo: todo }), children_only: true, exemptId: element.dataset["crap-id-value"])
       .broadcast_to(todo.list)
-  end
-
-  def forceUpdate
-    todo = Todo.find(element.dataset["todo-id"])
-    morph dom_id(todo), render(partial: "todos/entry", locals: { todo: todo })
   end
 
   def delete
