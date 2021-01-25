@@ -1,6 +1,5 @@
 import Velocity from 'velocity-animate'
 import ApplicationController from './application_controller'
-// import debounce from 'lodash/debounce'
 
 const uuidv4 = () => {
   const crypto = window.crypto || window.msCrypto
@@ -18,8 +17,7 @@ export default class extends ApplicationController {
 
   connect () {
     super.connect();
-    if (this.hasAfterValue) {
-      console.log(this.afterValue);
+    if (!this.element.dataset.listTarget) { // If we're not a template node. Alternatively, could look for the hidden class
       this.uuidValue = uuidv4();
       const el = document.createElement('div');
       el.id = 'a'+this.uuidValue;
@@ -27,6 +25,12 @@ export default class extends ApplicationController {
       el.dataset.newTodoTarget = 'replacement';
       this.element.insertAdjacentElement('beforeend', el);
       this.titleTarget.focus();
+      this.afterValueChanged();
+    }
+  }
+
+  afterValueChanged = () => {
+    if (this.hasAfterValue && this.hasUuidValue) {
       this.stimulate('List#newTodo', this.element, this.uuidValue, this.afterValue);
     }
   }
@@ -39,15 +43,26 @@ export default class extends ApplicationController {
     const replacement = this.replacementTarget.querySelector('div');
     replacement.remove();
 
+    const focus = document.activeElement === this.titleTarget;
     const title_text = this.titleTarget.value;
     const title = replacement.querySelector('[data-todo-target="title"]');
+
+    // If the next sibling is a new-todo controller, it needs an "after" value so it can position itself.
+    const row = this.element.nextElementSibling
+    if (row) {
+      row.dataset.newTodoAfterValue = replacement.dataset.todoId
+    }
 
     this.element.insertAdjacentElement('afterend', replacement);
     this.element.remove();
 
-    title.value = title_text;
-    title.dispatchEvent(new Event('input'));
-    title.focus();
+    if (title.value !== title_text) {
+      title.value = title_text;
+      title.dispatchEvent(new Event('input'));
+    }
+    if (focus) {
+      title.focus();
+    }
     replacement.dispatchEvent(new Event('created'));
   }
 

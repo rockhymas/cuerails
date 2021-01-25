@@ -20,11 +20,13 @@ export default class extends ApplicationController {
     }
     this.element.addEventListener('cable-ready:before-morph', this.onCableReady);
     this.element.addEventListener('cable-ready:before-insert-adjacent-html', this.onCableReady);
+    this.element.addEventListener('cable-ready:before-remove', this.onCableReady);
   }
 
   disconnect () {
     this.element.removeEventListener('cable-ready:before-morph', this.onCableReady);
     this.element.removeEventListener('cable-ready:before-insert-adjacent-html', this.onCableReady);
+    this.element.removeEventListener('cable-ready:before-remove', this.onCableReady);
   }
 
   onCableReady = (operation) => {

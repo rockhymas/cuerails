@@ -49,7 +49,7 @@ class ListReflex < ApplicationReflex
 
   def newTodo(uuid, after_todo_id)
     position = 0
-    if (after_todo_id.present?)
+    if (after_todo_id != -1)
       position = Todo.find(after_todo_id).position + 1
     end
     list = List.find(element.dataset["list-id"])

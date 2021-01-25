@@ -41,6 +41,10 @@ class TodoReflex < ApplicationReflex
       cable_ready[ListChannel]
         .insert_adjacent_html(selector: dom_id(prev_todo), position: :afterend, html: render(partial: "todos/entry", locals: { todo: todo }), exemptId: element.dataset["crap-id-value"])
         .broadcast_to(todo.list)
+    else
+      cable_ready[ListChannel]
+        .insert_adjacent_html(selector: dom_id(todo.list, 'items'), position: :afterbegin, html: render(partial: "todos/entry", locals: { todo: todo }), exemptId: element.dataset["crap-id-value"])
+        .broadcast_to(todo.list)
     end
   end
 
@@ -54,21 +58,14 @@ class TodoReflex < ApplicationReflex
     todo = Todo.find(todoId)
     list = todo.list
 
-    if list.todos.length == 1
-      todo.title = ''
-      todo.save
-      morph :nothing
-      cable_ready[ListChannel]
-        .morph(selector: dom_id(todo), html: render(partial: "todos/entry_contents", locals: { todo: todo }), children_only: true)
-        .broadcast_to(todo.list)
-      return
-    end
-
+    todo_selector = dom_id(todo)
     todo.destroy
-    
+
+    # TODO: run a check on the list? that will create a new one. Newly created todos update via CR like any other newly created todo
+
     morph :nothing
     cable_ready[ListChannel]
-      .dispatch_event(name: 'deleteTodo', selector: dom_id(todo))
+      .remove(selector: todo_selector, exemptId: element.dataset["crap-id-value"])
       .broadcast_to(list)
   end
 

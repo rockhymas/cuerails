@@ -44,14 +44,12 @@ export default class extends ApplicationController {
   }
 
   delete() {
-    this.debouncedRename.flush();
+    this.debouncedRename.cancel();
     this.stimulate('Todo#delete', this.deleteTarget);
-    if (this.titleTarget.value === '') {
-      Velocity(this.element, 'slideUp');
-    }
+    Velocity(this.element, 'slideUp');
   }
 
-  serverdelete() {
+  afterDelete() {
     Velocity(this.element, {opacity: 0}, {display: "none", complete: function() {
       this.element.remove();
     }.bind(this)});
@@ -68,13 +66,13 @@ export default class extends ApplicationController {
     }
     if (e.key === 'Delete' && this.titleTarget.value === '') {
       e.preventDefault();
-      this.focusNextTodo();
       this.delete();
+      this.focusNextTodo();
     }
     if (e.key === 'Backspace' && this.titleTarget.value === '') {
       e.preventDefault();
-      this.focusPrevTodo(true);
       this.delete();
+      this.focusPrevTodo(true);
     }
   }
 

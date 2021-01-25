@@ -62,44 +62,24 @@ export default class extends ApplicationController {
     if (e.key === 'Enter') {
       e.preventDefault();
       this.inserting = true;
-      // this.stimulate('List#insertTodo', e.target);
 
       let templateNode = this.templateTarget.cloneNode(true);
       let controller = e.target.closest('[data-controller*="todo"]');
 
       templateNode.classList.remove('hidden');
       delete templateNode.dataset.listTarget
-      templateNode.dataset.newTodoAfterValue = controller.dataset.todoId // TODO: What if dataset.todoId doesn't exist, because controller is a new todo?
-      controller.insertAdjacentElement("afterend", templateNode);
 
-      // let todoNode = this.templateTarget.querySelector('[data-controller*="new-todo"]').cloneNode(true);
-      // let controller = e.target.closest('[data-controller*="todo"]');
-      // console.log(controller);
-      // console.log(todoNode);
-      // controller.insertAdjacentElement('afterend', todoNode);
-      // todoNode.querySelector("input[type='text']").focus();
-
-      // this.inserting = true;
-      // this.stimulate('List#newTodo', e.target);
-
-      // generate html for new todo, data-todo-uuid = uuid, data-todo-id=new, id=todo-row-uuid
-      // what about id's for child elements that use the todo.id?
-      // Make todo_controller.js/todo_reflex.rb handle uuid, when they exist, across all methods
-      // Probably just prevent reflexes (rename/check/pin/delete) until todo.id is set
-      // stimulate('List#insertAfter', todo-id, new uuid)
-      // ^-- handler will hook up the new id once the todo is created
-      // afterInsertAfter will update the new todo with anything that happened while waiting, i.e. rename
-      //   and also do a stimulate that triggers cable ready updates for all other clients
-
+      if (controller == null) {
+        // inserting at start of list
+        this.itemsTarget.insertAdjacentElement("afterbegin", templateNode);
+        templateNode.dataset.newTodoAfterValue = -1
+      } else {
+        controller.insertAdjacentElement("afterend", templateNode);
+        if (controller.dataset.todoId) {
+          templateNode.dataset.newTodoAfterValue = controller.dataset.todoId // TODO: What if dataset.todoId doesn't exist, because controller is a new todo?
+        } // else new-todo controller will update next controller when it gets a todoId
+      }
     }
-  }
-
-  afterInsertTodo = () => {
-    // if (this.inserting) {
-    //   this.focusNextTodo()
-    // }
-
-    this.inserting = false
   }
 
   focusNextTodo = () => {
