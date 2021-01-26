@@ -34,23 +34,21 @@ export default class extends ApplicationController {
   insertOnEnter= e => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      this.inserting = true;
 
       let templateNode = this.templateTarget.cloneNode(true);
-      let controller = e.target.closest('[data-controller*="todo"]');
-
       templateNode.classList.remove('hidden');
       delete templateNode.dataset.listTarget
 
-      if (controller == null) {
+      let prevTodoElement = e.target.closest('[data-controller*="todo"]'); // this works for new-todo controllers as well
+      if (prevTodoElement == null) {
         // inserting at start of list
         this.itemsTarget.insertAdjacentElement("afterbegin", templateNode);
         templateNode.dataset.newTodoAfterValue = -1
       } else {
-        controller.insertAdjacentElement("afterend", templateNode);
-        if (controller.dataset.todoId) {
-          templateNode.dataset.newTodoAfterValue = controller.dataset.todoId // TODO: What if dataset.todoId doesn't exist, because controller is a new todo?
-        } // else new-todo controller will update next controller when it gets a todoId
+        prevTodoElement.insertAdjacentElement("afterend", templateNode);
+        if (prevTodoElement.dataset.todoId) {
+          templateNode.dataset.newTodoAfterValue = prevTodoElement.dataset.todoId
+        } // else new-todo controller will update next todo element when it gets a todoId
       }
     }
   }

@@ -35,6 +35,8 @@ export default class extends ApplicationController {
   }
 
   dragAdd = event => {
+    // TODO: fire an event on item, which kicks off cloneTo
+    // TODO: Can do something similar to kick off new todo creation/wireup, using the template
     this.stimulate(
       this.nameValue + '#cloneTo',
       event.item,
@@ -43,10 +45,7 @@ export default class extends ApplicationController {
   }
 
   pullDragged = (to, from) => {
-    if (
-      typeof to.options !== 'undefined' &&
-      to.options.group.name !== from.options.group.name
-    ) {
+    if (typeof to.options !== 'undefined' && to.options.group.name !== from.options.group.name) {
       return false
     }
 
