@@ -72,6 +72,7 @@ export default class extends ApplicationController {
   }
 
   rename() {
+    this.onRename();
   }
 
   onRename() {
@@ -84,6 +85,15 @@ export default class extends ApplicationController {
   }
 
   delete() {
+  }
+
+  keypress = e => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      let prevTodoElement = this.element;
+      const event = new CustomEvent('insertTodo', { bubbles: true, detail: { prevTodoElement } });
+      this.element.dispatchEvent(event);
+    }
   }
 
   keydown(e) {

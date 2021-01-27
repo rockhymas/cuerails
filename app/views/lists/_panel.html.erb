@@ -2,6 +2,7 @@
      class="bg-white flex-grow rounded space-y-4 pb-2"
      data-controller="list update"
      data-list-id="<%=list.id%>"
+     data-action="insertTodo->list#insert"
      data-update-name-value="List"
      data-update-id-value="<%=list.id%>" >
   <%= render partial: 'lists/panel_contents', locals: { list: list } %>

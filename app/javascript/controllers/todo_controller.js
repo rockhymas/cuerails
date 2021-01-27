@@ -6,7 +6,7 @@ export default class extends ApplicationController {
   static targets = [ "checkbox", 'title', 'delete', 'handle', 'options', 'pinned' ]
 
   connect () {
-    super.connect()
+    super.connect();
 
     this.debouncedRename = debounce(() => {
       this.stimulate('Todo#rename', this.titleTarget);
@@ -51,6 +51,15 @@ export default class extends ApplicationController {
     }.bind(this)});
   }
 
+  keypress = e => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      let prevTodoElement = this.element;
+      const event = new CustomEvent('insertTodo', { bubbles: true, detail: { prevTodoElement } });
+      this.element.dispatchEvent(event);
+    }
+  }
+
   keydown(e) {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
@@ -84,17 +93,15 @@ export default class extends ApplicationController {
     const row = this.element.nextElementSibling
     if (row) {
       row.querySelector("input[type='text']").focus();
-      // Velocity(row, {backgroundColor: '#2d842f'}).then(Velocity(row, {backgroundColor: '#FFF'}));
     }
   }
 
   focusPrevTodo(cursorAtEnd) {
     const row = this.element.previousElementSibling
     if (row) {
-      const input = row.querySelector("input[type='text']")
+      const input = row.querySelector("input[type='text']");
       if (input) {
         input.focus();
-        // Velocity(row, {backgroundColor: '#2d842f'}).then(Velocity(row, {backgroundColor: '#FFF'}));
         if (cursorAtEnd) {
           input.setSelectionRange(input.value.length, input.value.length);
         }
