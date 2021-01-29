@@ -31,7 +31,8 @@ export default class extends ApplicationController {
 
   onCableReady = (operation) => {
     if (operation.detail.exemptId === this.idValue) {
-      console.log('cancelling operation: ' + operation.detail);
+      console.log('cancelling operation: ');
+      console.log(operation.detail);
       operation.detail.cancel = true;
     }
   }

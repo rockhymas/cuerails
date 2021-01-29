@@ -35,13 +35,9 @@ export default class extends ApplicationController {
   }
 
   dragAdd = event => {
-    // TODO: fire an event on item, which kicks off cloneTo
-    // TODO: Can do something similar to kick off new todo creation/wireup, using the template
-    this.stimulate(
-      this.nameValue + '#cloneTo',
-      event.item,
-      event.newIndex
-    )
+    const title = event.item.querySelector('[data-todo-target="title"]').value;
+    const e = new CustomEvent('insertTodo', { bubbles: true, detail: { cloneItem: event.item, title } });
+    this.element.dispatchEvent(e);
   }
 
   pullDragged = (to, from) => {

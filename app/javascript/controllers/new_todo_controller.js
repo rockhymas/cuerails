@@ -13,7 +13,7 @@ const uuidv4 = () => {
 
 export default class extends ApplicationController {
   static targets = [ "checkbox", 'title', 'delete', 'handle', 'options', 'pinned', 'replacement' ]
-  static values = { uuid: String, after: Number }
+  static values = { uuid: String, after: Number, cloneId: Number }
 
   connect () {
     super.connect();
@@ -25,13 +25,15 @@ export default class extends ApplicationController {
       el.dataset.newTodoTarget = 'replacement';
       this.element.insertAdjacentElement('beforeend', el);
       this.titleTarget.focus();
+      this.onRename();
       this.afterValueChanged();
     }
   }
 
   afterValueChanged = () => {
     if (this.hasAfterValue && this.hasUuidValue) {
-      this.stimulate('List#newTodo', this.element, this.uuidValue, this.afterValue);
+      const cloneId = this.hasCloneIdValue ? this.cloneIdValue : null;
+      this.stimulate('List#newTodo', this.element, this.uuidValue, this.afterValue, cloneId);
     }
   }
 
@@ -129,7 +131,6 @@ export default class extends ApplicationController {
     const row = this.element.nextElementSibling
     if (row) {
       row.querySelector("input[type='text']").focus();
-      // Velocity(row, {backgroundColor: '#2d842f'}).then(Velocity(row, {backgroundColor: '#FFF'}));
     }
   }
 
@@ -139,7 +140,6 @@ export default class extends ApplicationController {
       const input = row.querySelector("input[type='text']")
       if (input) {
         input.focus();
-        // Velocity(row, {backgroundColor: '#2d842f'}).then(Velocity(row, {backgroundColor: '#FFF'}));
         if (cursorAtEnd) {
           input.setSelectionRange(input.value.length, input.value.length);
         }

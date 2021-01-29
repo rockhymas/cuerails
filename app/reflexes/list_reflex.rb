@@ -19,7 +19,7 @@ class ListReflex < ApplicationReflex
     end
   end
 
-  def newTodo(uuid, after_todo_id)
+  def newTodo(uuid, after_todo_id, clone_todo_id)
     position = 0
     prev_todo = nil
     if (after_todo_id != -1)
@@ -27,8 +27,12 @@ class ListReflex < ApplicationReflex
       position = prev_todo.position + 1
     end
     list = List.find(element.dataset["list-id"])
+    clone_todo = nil
+    if clone_todo_id.present?
+      clone_todo = Todo.find(clone_todo_id)
+    end
 
-    new_todo = Todo.create(list: list, position: position)
+    new_todo = Todo.create(list: list, position: position, title: clone_todo.present? ? clone_todo.title : '')
     morph "#a#{uuid}", render(partial: "todos/entry", locals: { todo: new_todo })
 
     if prev_todo.present?
@@ -39,6 +43,15 @@ class ListReflex < ApplicationReflex
       cable_ready[ListChannel]
         .insert_adjacent_html(selector: dom_id(list, 'items'), position: :afterbegin, html: render(partial: "todos/entry", locals: { todo: new_todo }), exemptId: element.dataset["crap-id-value"])
         .broadcast_to(list)
+    end
+
+    if clone_todo.present?
+      if !clone_todo.pinned
+        cable_ready[ListChannel]
+          .remove(selector: dom_id(clone_todo), exemptId: element.dataset["crap-id-value"])
+          .broadcast_to(clone_todo.list)
+        clone_todo.destroy
+      end
     end
   end
 
@@ -51,29 +64,6 @@ class ListReflex < ApplicationReflex
     cable_ready[ListChannel]
       .morph(selector: dom_id(todo.list), html: render(partial: "lists/panel_contents", locals: { list: todo.list }), children_only: true)
       .broadcast_to(todo.list)
-  end
-
-  def cloneTo(new_index)
-    todo_id = element.dataset["todo-id"]
-    todo = Todo.find(todo_id)
-    old_list = todo.list
-    list = List.find(element.dataset["list-id"])
-
-    new_todo = Todo.create(list: list, title: todo.title, position: new_index + 1)
-    new_todo.save
-
-    if !todo.pinned
-      cable_ready[ListChannel]
-        .remove(selector: dom_id(todo))
-        .broadcast_to(old_list)
-      todo.destroy
-    end
-
-    morph :nothing
-    # TODO: Can we make this an insert_adjacent, with exemption? Or user the newTodo flow?
-    cable_ready[ListChannel]
-      .morph(selector: dom_id(list), html: render(partial: "lists/panel_contents", locals: { list: list }), children_only: true)
-      .broadcast_to(list)
   end
 
 end

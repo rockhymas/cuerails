@@ -30,12 +30,21 @@ export default class extends ApplicationController {
   }
 
   insert = e => {
-    console.log(e);
     let templateNode = this.templateTarget.cloneNode(true);
     templateNode.classList.remove('hidden');
     delete templateNode.dataset.listTarget;
 
-    const prevTodoElement = e.detail.prevTodoElement;
+    let prevTodoElement = null;
+    if (e.detail.cloneItem) {
+      prevTodoElement = e.detail.cloneItem.previousElementSibling;
+      templateNode.dataset.newTodoCloneIdValue = e.detail.cloneItem.dataset.todoId;
+      e.detail.cloneItem.remove();
+    } else {
+      prevTodoElement = e.detail.prevTodoElement;
+    }
+
+    templateNode.querySelector('[data-new-todo-target="title"]').value = e.detail.title;
+
     if (prevTodoElement == null) {
       // inserting at start of list
       this.itemsTarget.insertAdjacentElement("afterbegin", templateNode);
