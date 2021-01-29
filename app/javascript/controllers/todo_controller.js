@@ -41,14 +41,14 @@ export default class extends ApplicationController {
 
   delete() {
     this.debouncedRename.cancel();
+    this.animationPromise = Velocity(this.element, 'slideUp');
     this.stimulate('Todo#delete', this.deleteTarget);
-    Velocity(this.element, 'slideUp');
   }
 
   afterDelete() {
-    Velocity(this.element, {opacity: 0}, {display: "none", complete: function() {
+    this.animationPromise.then(() => {
       this.element.remove();
-    }.bind(this)});
+    });
   }
 
   keypress = e => {
