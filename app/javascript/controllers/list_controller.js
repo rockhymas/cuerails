@@ -29,6 +29,13 @@ export default class extends ApplicationController {
     window.document.execCommand('insertText', false, text);
   }
 
+  insertOnEnter = e => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      this.insert({ detail: {} });
+    }
+  }
+
   insert = e => {
     let templateNode = this.templateTarget.cloneNode(true);
     templateNode.classList.remove('hidden');
@@ -43,7 +50,9 @@ export default class extends ApplicationController {
       prevTodoElement = e.detail.prevTodoElement;
     }
 
-    templateNode.querySelector('[data-new-todo-target="title"]').value = e.detail.title;
+    if (e.detail.title) {
+      templateNode.querySelector('[data-new-todo-target="title"]').value = e.detail.title;
+    }
 
     if (prevTodoElement == null) {
       // inserting at start of list
