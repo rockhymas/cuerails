@@ -68,6 +68,7 @@ class User < ApplicationRecord
       return
     end
 
+    # TODO: Handle an old planned day (i.e. yesterday)
     zone = ActiveSupport::TimeZone.new(time_zone)
     today = zone.now.to_date
     self.plan_list_set.lists.where("date < :today", {today: today}).each do |list|
@@ -76,6 +77,9 @@ class User < ApplicationRecord
 
     self.plan_list = nil
     self.save
+    # TODO: cable ready updates to all clients
+    # TODO: we'll need a planning channel that can update the plan list div
+    # TODO: also update the plan list set through the list set channel
   end
 
   def gravatar_url
