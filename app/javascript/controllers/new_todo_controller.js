@@ -1,16 +1,6 @@
 import Velocity from 'velocity-animate'
 import ApplicationController from './application_controller'
 
-const uuidv4 = () => {
-  const crypto = window.crypto || window.msCrypto
-  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
-    (
-      c ^
-      (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-    ).toString(16)
-  )
-}
-
 export default class extends ApplicationController {
   static targets = [ "checkbox", 'title', 'delete', 'handle', 'options', 'pinned', 'replacement' ]
   static values = { uuid: String, after: Number, cloneId: Number }
@@ -18,7 +8,7 @@ export default class extends ApplicationController {
   connect () {
     super.connect();
     if (!this.element.dataset.listTarget) { // If we're not a template node. Alternatively, could look for the hidden class
-      this.uuidValue = uuidv4();
+      this.uuidValue = this.uuidv4();
       const el = document.createElement('div');
       el.id = 'a'+this.uuidValue;
       el.classList.add('hidden');
