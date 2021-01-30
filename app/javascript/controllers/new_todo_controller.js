@@ -4,11 +4,20 @@ import debounce from 'lodash/debounce'
 
 export default class extends ApplicationController {
   static targets = [ "checkbox", 'title', 'delete', 'handle', 'options', 'pinned', 'replacement' ]
-  static values = { uuid: String, after: Number, cloneId: Number }
+  static values = { uuid: String, after: Number, cloneId: Number, id: Number }
 
   connect () {
     super.connect();
-    if (!this.element.dataset.listTarget) { // If we're not a template node. Alternatively, could look for the hidden class
+
+    if (!!this.element.dataset.listTarget) { // If we're not a template node. Alternatively, could look for the hidden class
+      return;
+    }
+
+    if (this.hasIdValue) {
+      this.debouncedRename = debounce(() => {
+        this.stimulate('Todo#rename', this.titleTarget);
+      }, 2000);
+    } else {
       this.uuidValue = this.uuidv4();
       const el = document.createElement('div');
       el.id = 'a'+this.uuidValue;
@@ -59,13 +68,22 @@ export default class extends ApplicationController {
   }
 
   complete(event) {
+    if (this.hasIdValue) {
+      this.stimulate('Todo#complete', this.checkboxTarget);
+    }
   }
 
   togglePin(event) {
+    if (this.hasIdValue) {
+      this.stimulate('Todo#togglePin', this.pinnedTarget);
+    }
   }
 
   rename() {
     this.onRename();
+    if (this.hasIdValue) {
+      this.debouncedRename();
+    }
   }
 
   onRename() {
@@ -77,7 +95,24 @@ export default class extends ApplicationController {
     }
   }
 
+  blur() {
+    if (this.hasIdValue) {
+      this.debouncedRename.flush();
+    }
+  }
+
   delete() {
+    if (this.hasIdValue) {
+      this.debouncedRename.cancel();
+      this.animationPromise = Velocity(this.element, 'slideUp');
+      this.stimulate('Todo#delete', this.deleteTarget);
+    }
+  }
+
+  afterDelete() {
+    this.animationPromise.then(() => {
+      this.element.remove();
+    });
   }
 
   keypress = e => {
@@ -100,13 +135,13 @@ export default class extends ApplicationController {
     }
     if (e.key === 'Delete' && this.titleTarget.value === '') {
       e.preventDefault();
-      this.focusNextTodo();
       this.delete();
+      this.focusNextTodo();
     }
     if (e.key === 'Backspace' && this.titleTarget.value === '') {
       e.preventDefault();
-      this.focusPrevTodo(true);
       this.delete();
+      this.focusPrevTodo(true);
     }
   }
 

@@ -3,27 +3,87 @@ import ApplicationController from './application_controller'
 import debounce from 'lodash/debounce'
 
 export default class extends ApplicationController {
-  static targets = [ "checkbox", 'title', 'delete', 'handle', 'options', 'pinned' ]
+  static targets = [ "checkbox", 'title', 'delete', 'handle', 'options', 'pinned', 'replacement' ]
+  static values = { uuid: String, after: Number, cloneId: Number, id: Number }
 
   connect () {
     super.connect();
 
-    this.debouncedRename = debounce(() => {
-      this.stimulate('Todo#rename', this.titleTarget);
-    }, 2000);
+    if (!!this.element.dataset.listTarget) { // If we're not a template node. Alternatively, could look for the hidden class
+      return;
+    }
+
+    if (this.hasIdValue) {
+      this.debouncedRename = debounce(() => {
+        this.stimulate('Todo#rename', this.titleTarget);
+      }, 2000);
+    } else {
+      this.uuidValue = this.uuidv4();
+      const el = document.createElement('div');
+      el.id = 'a'+this.uuidValue;
+      el.classList.add('hidden');
+      el.dataset.todoTarget = 'replacement';
+      this.element.insertAdjacentElement('beforeend', el);
+      this.titleTarget.focus();
+      this.onRename();
+      this.afterValueChanged();
+    }
+  }
+
+  afterValueChanged = () => {
+    if (this.hasAfterValue && this.hasUuidValue) {
+      const cloneId = this.hasCloneIdValue ? this.cloneIdValue : null;
+      this.stimulate('List#newTodo', this.element, this.uuidValue, this.afterValue, cloneId);
+    }
+  }
+
+  finalizeNewTodo() {
+    // Copy over any changes to the new todo elements
+    // ensure reflexes are stimulated
+    // Tear self down, make it all seamless
+    console.log('after new todo');
+    const replacement = this.replacementTarget.querySelector('div');
+    replacement.remove();
+
+    const focus = document.activeElement === this.titleTarget;
+    const title_text = this.titleTarget.value;
+    const title = replacement.querySelector('[data-todo-target="title"]');
+
+    // If the next sibling is a todo controller, it needs an "after" value so it can position itself.
+    const row = this.element.nextElementSibling
+    if (row) {
+      row.dataset.todoAfterValue = replacement.dataset.todoIdValue
+    }
+
+    this.element.insertAdjacentElement('afterend', replacement);
+    this.element.remove();
+
+    if (title.value !== title_text) {
+      title.value = title_text;
+      title.dispatchEvent(new Event('input'));
+    }
+    if (focus) {
+      title.focus();
+    }
   }
 
   complete(event) {
-    this.stimulate('Todo#complete', this.checkboxTarget);
+    if (this.hasIdValue) {
+      this.stimulate('Todo#complete', this.checkboxTarget);
+    }
   }
 
   togglePin(event) {
-    this.stimulate('Todo#togglePin', this.pinnedTarget);
+    if (this.hasIdValue) {
+      this.stimulate('Todo#togglePin', this.pinnedTarget);
+    }
   }
 
   rename() {
     this.onRename();
-    this.debouncedRename();
+    if (this.hasIdValue) {
+      this.debouncedRename();
+    }
   }
 
   onRename() {
@@ -36,13 +96,17 @@ export default class extends ApplicationController {
   }
 
   blur() {
-    this.debouncedRename.flush();
+    if (this.hasIdValue) {
+      this.debouncedRename.flush();
+    }
   }
 
   delete() {
-    this.debouncedRename.cancel();
-    this.animationPromise = Velocity(this.element, 'slideUp');
-    this.stimulate('Todo#delete', this.deleteTarget);
+    if (this.hasIdValue) {
+      this.debouncedRename.cancel();
+      this.animationPromise = Velocity(this.element, 'slideUp');
+      this.stimulate('Todo#delete', this.deleteTarget);
+    }
   }
 
   afterDelete() {
@@ -99,7 +163,7 @@ export default class extends ApplicationController {
   focusPrevTodo(cursorAtEnd) {
     const row = this.element.previousElementSibling
     if (row) {
-      const input = row.querySelector("input[type='text']");
+      const input = row.querySelector("input[type='text']")
       if (input) {
         input.focus();
         if (cursorAtEnd) {
