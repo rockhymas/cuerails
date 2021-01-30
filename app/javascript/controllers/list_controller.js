@@ -44,25 +44,25 @@ export default class extends ApplicationController {
     let prevTodoElement = null;
     if (e.detail.cloneItem) {
       prevTodoElement = e.detail.cloneItem.previousElementSibling;
-      templateNode.dataset.newTodoCloneIdValue = e.detail.cloneItem.dataset.todoIdValue;
+      templateNode.dataset.todoCloneIdValue = e.detail.cloneItem.dataset.todoIdValue;
       e.detail.cloneItem.remove();
     } else {
       prevTodoElement = e.detail.prevTodoElement;
     }
 
     if (e.detail.title) {
-      templateNode.querySelector('[data-new-todo-target="title"]').value = e.detail.title;
+      templateNode.querySelector('[data-todo-target="title"]').value = e.detail.title;
     }
 
     if (prevTodoElement == null) {
       // inserting at start of list
       this.itemsTarget.insertAdjacentElement("afterbegin", templateNode);
-      templateNode.dataset.newTodoAfterValue = -1;
+      templateNode.dataset.todoAfterValue = -1;
     } else {
       prevTodoElement.insertAdjacentElement("afterend", templateNode);
       if (prevTodoElement.dataset.todoIdValue) {
-        templateNode.dataset.newTodoAfterValue = prevTodoElement.dataset.todoIdValue;
-      } // else new-todo controller will update next todo element when it gets a todoIdValue
+        templateNode.dataset.todoAfterValue = prevTodoElement.dataset.todoIdValue;
+      } // else todo controller will update next todo element when it gets a todoIdValue
     }
   }
 
