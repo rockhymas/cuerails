@@ -44,7 +44,7 @@ export default class extends ApplicationController {
     let prevTodoElement = null;
     if (e.detail.cloneItem) {
       prevTodoElement = e.detail.cloneItem.previousElementSibling;
-      templateNode.dataset.newTodoCloneIdValue = e.detail.cloneItem.dataset.todoId;
+      templateNode.dataset.newTodoCloneIdValue = e.detail.cloneItem.dataset.todoIdValue;
       e.detail.cloneItem.remove();
     } else {
       prevTodoElement = e.detail.prevTodoElement;
@@ -60,9 +60,9 @@ export default class extends ApplicationController {
       templateNode.dataset.newTodoAfterValue = -1;
     } else {
       prevTodoElement.insertAdjacentElement("afterend", templateNode);
-      if (prevTodoElement.dataset.todoId) {
-        templateNode.dataset.newTodoAfterValue = prevTodoElement.dataset.todoId;
-      } // else new-todo controller will update next todo element when it gets a todoId
+      if (prevTodoElement.dataset.todoIdValue) {
+        templateNode.dataset.newTodoAfterValue = prevTodoElement.dataset.todoIdValue;
+      } // else new-todo controller will update next todo element when it gets a todoIdValue
     }
   }
 

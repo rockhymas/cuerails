@@ -56,7 +56,7 @@ class ListReflex < ApplicationReflex
   end
 
   def positionItem(new_index)
-    todo = Todo.find(element.dataset["todo-id"])
+    todo = Todo.find(element.dataset["todo-id-value"])
     todo.position = new_index + 1
     todo.save
 

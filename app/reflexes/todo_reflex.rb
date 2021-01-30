@@ -3,7 +3,7 @@
 class TodoReflex < ApplicationReflex
 
   def complete
-    todo = Todo.find(element.dataset["todo-id"])
+    todo = Todo.find(element.dataset["todo-id-value"])
     todo.toggle! :complete
 
     morph :nothing
@@ -13,7 +13,7 @@ class TodoReflex < ApplicationReflex
   end
 
   def togglePin
-    todo = Todo.find(element.dataset["todo-id"])
+    todo = Todo.find(element.dataset["todo-id-value"])
     todo.toggle! :pinned
 
     morph :nothing
@@ -23,7 +23,7 @@ class TodoReflex < ApplicationReflex
   end
 
   def rename
-    todo = Todo.find(element.dataset["todo-id"])
+    todo = Todo.find(element.dataset["todo-id-value"])
     todo.title = element.value
     todo.save
 
@@ -34,7 +34,7 @@ class TodoReflex < ApplicationReflex
   end
 
   def delete
-    todo = Todo.find(element.dataset["todo-id"])
+    todo = Todo.find(element.dataset["todo-id-value"])
 
     list = todo.list
     todo_selector = dom_id(todo)

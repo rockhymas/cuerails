@@ -1,5 +1,6 @@
 import Velocity from 'velocity-animate'
 import ApplicationController from './application_controller'
+import debounce from 'lodash/debounce'
 
 export default class extends ApplicationController {
   static targets = [ "checkbox", 'title', 'delete', 'handle', 'options', 'pinned', 'replacement' ]
@@ -42,7 +43,7 @@ export default class extends ApplicationController {
     // If the next sibling is a new-todo controller, it needs an "after" value so it can position itself.
     const row = this.element.nextElementSibling
     if (row) {
-      row.dataset.newTodoAfterValue = replacement.dataset.todoId
+      row.dataset.newTodoAfterValue = replacement.dataset.todoIdValue
     }
 
     this.element.insertAdjacentElement('afterend', replacement);
