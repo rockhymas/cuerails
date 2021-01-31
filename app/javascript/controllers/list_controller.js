@@ -38,8 +38,8 @@ export default class extends ApplicationController {
 
   insert = e => {
     let templateNode = this.templateTarget.cloneNode(true);
-    templateNode.classList.remove('hidden');
     delete templateNode.dataset.listTarget;
+    templateNode.classList.remove('hidden');
 
     let prevTodoElement = null;
     if (e.detail.cloneItem) {

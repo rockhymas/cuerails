@@ -1,7 +1,12 @@
-<div id="<%=dom_id(todo)%>"
-    class="flex flex-col space-y-2"
+<div class="flex flex-col space-y-2 <%= todo.persisted? ? '' : 'hidden'%>"
     data-controller="todo"
-    data-todo-id-value="<%=todo.id%>"
-    data-reflex-dataset="combined">
+    data-reflex-dataset="combined"
+    <% if todo.persisted? %>
+      id="<%=dom_id(todo)%>"
+      data-todo-id-value="<%=todo.id%>"
+    <% else %>
+      data-list-target="template"
+    <% end %>
+    >
   <%= render partial: 'todos/entry_contents', locals: { todo: todo } %>
 </div>
