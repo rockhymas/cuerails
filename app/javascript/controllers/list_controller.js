@@ -39,13 +39,13 @@ export default class extends ApplicationController {
   insert = e => {
     let prevTodoElement = e.detail.prevTodoElement;
 
-    // Make a todo node from the template
+    // Make a todo node from the template and the event details
     let newTodoNode = this.templateTarget.cloneNode(true);
     delete newTodoNode.dataset.listTarget;
     newTodoNode.classList.remove('hidden');
     newTodoNode.querySelector('[data-todo-target="title"]').value = e.detail.title || '';
     newTodoNode.dataset.todoCloneIdValue = e.detail.cloneItemId;
-    newTodoNode.dataset.todoAfterValue = prevTodoElement ? (prevTodoElement.dataset.todoIdValue || undefined) : -1;
+    newTodoNode.dataset.todoAfterValue = prevTodoElement ? prevTodoElement.dataset.todoIdValue : -1;
 
     // Insert it
     if (prevTodoElement) {
