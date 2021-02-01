@@ -36,7 +36,10 @@ export default class extends ApplicationController {
 
   dragAdd = event => {
     const title = event.item.querySelector('[data-todo-target="title"]').value;
-    const e = new CustomEvent('insertTodo', { bubbles: true, detail: { cloneItem: event.item, title } });
+    const prevTodoElement = event.item.previousElementSibling;
+    const cloneItemId = event.item.dataset.todoIdValue;
+    event.item.remove();
+    const e = new CustomEvent('insertTodo', { bubbles: true, detail: { cloneItemId, title, prevTodoElement } });
     this.element.dispatchEvent(e);
   }
 

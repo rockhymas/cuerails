@@ -18,20 +18,28 @@ export default class extends ApplicationController {
         this.stimulate('Todo#rename', this.titleTarget);
       }, 2000);
     } else {
-      this.uuidValue = this.uuidv4();
+      const uuidValue = this.uuidv4();
       const el = document.createElement('div');
-      el.id = 'a'+this.uuidValue;
+      el.id = 'a' + uuidValue;
       el.classList.add('hidden');
       el.dataset.todoTarget = 'replacement';
       this.element.insertAdjacentElement('beforeend', el);
       this.titleTarget.focus();
       this.onRename();
-      this.afterValueChanged();
+      this.uuidValue = uuidValue;
     }
   }
 
+  uuidValueChanged = () => {
+    this.newTodoCheck();
+  }
+
   afterValueChanged = () => {
-    if (this.hasAfterValue && this.hasUuidValue) {
+    this.newTodoCheck();
+  }
+
+  newTodoCheck = () => {
+    if (this.hasAfterValue && Number.isFinite(this.afterValue) && this.hasUuidValue) {
       const cloneId = this.hasCloneIdValue ? this.cloneIdValue : null;
       this.stimulate('List#newTodo', this.element, this.uuidValue, this.afterValue, cloneId);
     }
@@ -41,7 +49,6 @@ export default class extends ApplicationController {
     // Copy over any changes to the new todo elements
     // ensure reflexes are stimulated
     // Tear self down, make it all seamless
-    console.log('after new todo');
     const replacement = this.replacementTarget.querySelector('div');
     replacement.remove();
 
