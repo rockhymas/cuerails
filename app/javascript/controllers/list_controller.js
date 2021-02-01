@@ -37,28 +37,22 @@ export default class extends ApplicationController {
   }
 
   insert = e => {
-    let templateNode = this.templateTarget.cloneNode(true);
-    delete templateNode.dataset.listTarget;
-    templateNode.classList.remove('hidden');
-    templateNode.querySelector('[data-todo-target="title"]').value = e.detail.title || '';
-
-    if (e.detail.cloneItemId) {
-      templateNode.dataset.todoCloneIdValue = e.detail.cloneItemId;
-    }
-
     let prevTodoElement = e.detail.prevTodoElement;
-    let insertAt = 'afterend';
-    let todoAfterValue = prevTodoElement ? (prevTodoElement.dataset.todoIdValue || undefined) : -1;
-    templateNode.dataset.todoAfterValue = todoAfterValue;
-    if (prevTodoElement == null) {
-      // templateNode.dataset.todoAfterValue = -1;
-      insertAt = 'afterbegin';
-      prevTodoElement = this.itemsTarget;
-    } else if (prevTodoElement.dataset.todoIdValue) {
-      // templateNode.dataset.todoAfterValue = prevTodoElement.dataset.todoIdValue;
-    }
 
-    prevTodoElement.insertAdjacentElement(insertAt, templateNode);
+    // Make a todo node from the template
+    let newTodoNode = this.templateTarget.cloneNode(true);
+    delete newTodoNode.dataset.listTarget;
+    newTodoNode.classList.remove('hidden');
+    newTodoNode.querySelector('[data-todo-target="title"]').value = e.detail.title || '';
+    newTodoNode.dataset.todoCloneIdValue = e.detail.cloneItemId;
+    newTodoNode.dataset.todoAfterValue = prevTodoElement ? (prevTodoElement.dataset.todoIdValue || undefined) : -1;
+
+    // Insert it
+    if (prevTodoElement) {
+      prevTodoElement.insertAdjacentElement('afterend', newTodoNode);
+    } else {
+      this.itemsTarget.insertAdjacentElement('afterbegin', newTodoNode);
+    }
   }
 
   focusFirstTodo = () => {

@@ -40,7 +40,7 @@ export default class extends ApplicationController {
 
   newTodoCheck = () => {
     if (this.hasAfterValue && Number.isFinite(this.afterValue) && this.hasUuidValue) {
-      const cloneId = this.hasCloneIdValue ? this.cloneIdValue : null;
+      const cloneId = this.hasCloneIdValue && Number.isFinite(this.cloneIdValue) ? this.cloneIdValue : null;
       this.stimulate('List#newTodo', this.element, this.uuidValue, this.afterValue, cloneId);
     }
   }
