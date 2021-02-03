@@ -24,7 +24,9 @@ export default class extends ApplicationController {
       el.classList.add('hidden');
       el.dataset.todoTarget = 'replacement';
       this.element.insertAdjacentElement('beforeend', el);
-      this.titleTarget.focus();
+      if (!this.hasCloneIdValue || !Number.isFinite(this.cloneIdValue)) {
+        this.titleTarget.focus();
+      }
       this.onRename();
       this.uuidValue = uuidValue;
     }
@@ -46,25 +48,23 @@ export default class extends ApplicationController {
   }
 
   finalizeNewTodo() {
-    // Copy over any changes to the new todo elements
-    // ensure reflexes are stimulated
-    // Tear self down, make it all seamless
-    const replacement = this.replacementTarget.querySelector('div');
-    replacement.remove();
-
+    // Get properties from this todo
     const focus = document.activeElement === this.titleTarget;
+    const selection = { start: this.titleTarget.selectionStart, end: this.titleTarget.selectionEnd };
     const title_text = this.titleTarget.value;
-    const title = replacement.querySelector('[data-todo-target="title"]');
 
-    // If the next sibling is a todo controller, it needs an "after" value so it can position itself.
-    const row = this.element.nextElementSibling
-    if (row) {
-      row.dataset.todoAfterValue = replacement.dataset.todoIdValue
+    // If the next sibling is a todo controller without an id, it needs an "after" value so it can position itself.
+    const newTodo = this.replacementTarget.firstElementChild;
+    const nextTodo = this.element.nextElementSibling
+    if (nextTodo && nextTodo.dataset.todoIdValue === undefined) {
+      nextTodo.dataset.todoAfterValue = newTodo.dataset.todoIdValue
     }
 
-    this.element.insertAdjacentElement('afterend', replacement);
+    this.element.insertAdjacentElement('afterend', newTodo);
     this.element.remove();
 
+    // Set properties on the new todo
+    const title = newTodo.querySelector('[data-todo-target="title"]');
     if (title.value !== title_text) {
       title.value = title_text;
       title.dispatchEvent(new Event('input'));
@@ -72,6 +72,7 @@ export default class extends ApplicationController {
     if (focus) {
       title.focus();
     }
+    title.setSelectionRange(selection.start, selection.end);
   }
 
   complete(event) {
