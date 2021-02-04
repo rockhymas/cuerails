@@ -14,7 +14,7 @@ class ListReflex < ApplicationReflex
 
     if list.list_set.present?
       cable_ready[ListSetChannel]
-        .morph(selector: dom_id(list.list_set), html: render(partial: "list_sets/items", locals: { list_set: list.list_set }), children_only: true)
+        .morph(selector: dom_id(list.list_set, 'contents'), html: render(partial: "list_sets/items", locals: { list_set: list.list_set }), children_only: true)
         .broadcast_to(list.list_set)
     end
   end

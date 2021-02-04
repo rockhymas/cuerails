@@ -1,0 +1,7 @@
+<%= render layout: 'list_sets/set', locals: { list_set: current_user.plan_list_set } do %>
+  <% if current_user.can_plan_day? %>
+    <div class="hover:bg-green-100 text-center">
+      <%= link_to t(:plan_next_day), plan_next_day_path, method: :post %>
+    </div>
+  <% end %>
+<% end %>
