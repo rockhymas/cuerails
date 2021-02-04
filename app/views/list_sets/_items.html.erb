@@ -6,8 +6,13 @@
     <% end %>
 >
   <% list_set.lists.each do |list| %>
-    <div data-list-id="<%= list.id %>" class="hover:bg-green-100">
-      <%= link_to(list.name, list) %>
+    <% is_plan_list = list.user.plan_list == list %>
+    <div data-list-id="<%= list.id %>" class="hover:bg-green-100 <%= is_plan_list ? 'text-center' : '' %>">
+      <% if is_plan_list %>
+        <%= content_tag(:span, 'Creating ' + list.name) %>
+      <% else %>
+        <%= link_to(list.name, list) %>
+      <% end %>
       <% if list_set.user_managed %>
         <span class="handle float-right">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 297 297" width="16" height="16" class="inline fill-current text-green-600">
