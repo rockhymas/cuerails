@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   resources :lists, only: [:show, :destroy] do
-    post 'current', on: :new
+    post 'current', on: :new, to: 'lists#new_current'
+    get 'current', on: :collection
   end
 
   devise_for :users

@@ -15,19 +15,20 @@ class ListsController < ApplicationController
     end
   end
 
-  def current
+  def new_current
     new_list = List.create(list_set: current_user.current_list_set, user: current_user)
     redirect_to new_list
+  end
+
+  def current
+    current_user.ensure_list_sets
+    @list = current_user.current_day_plan
+    render 'show'
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_list
       @list = List.find(params[:id])
-    end
-
-    # Only allow a list of trusted parameters through.
-    def list_params
-      params.require(:list).permit(:title, :date)
     end
 end
