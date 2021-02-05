@@ -60,6 +60,10 @@ class User < ApplicationRecord
     day_to_plan_list = List.create(list_set: plan_list_set, user: self, date: day_to_plan)
     self.plan_list = day_to_plan_list
     self.save
+
+    # TODO: cable ready updates to all clients
+    # TODO: we'll need a planning channel that can update the plan list div
+    # TODO: also update the plan list set through the list set channel
   end
 
   def stop_planning
@@ -68,10 +72,9 @@ class User < ApplicationRecord
       return
     end
 
-    # TODO: Handle an old planned day (i.e. yesterday)
     zone = ActiveSupport::TimeZone.new(time_zone)
     today = zone.now.to_date
-    self.plan_list_set.lists.where("date < :today", {today: today}).each do |list|
+    self.plan_list_set.lists.where("date < :today", {today: today}).limit(1).each do |list|
       self.plan_list_set.lists.delete(list)
     end
 

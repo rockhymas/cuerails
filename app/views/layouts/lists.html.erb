@@ -1,9 +1,11 @@
 <% content_for :content do %>
   <%= yield %>
 
-  <% if current_user.plan_list %>
-    <%= render partial: 'lists/panel', locals: { list: current_user.plan_list } %>
-  <% end %>
+  <div id="plan_container" class="flex-1" data-controller="plan">
+    <% if current_user.plan_list %>
+      <%= render partial: 'lists/panel', locals: { list: current_user.plan_list } %>
+    <% end %>
+  </div>
 <% end %>
 
 <%= render template: "layouts/application" %>
