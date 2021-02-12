@@ -26,7 +26,7 @@ class User < ApplicationRecord
     if plan_list_set.lists.empty?
       zone = ActiveSupport::TimeZone.new(time_zone)
       today = zone.now.to_date
-      today_plan = List.create(list_set: plan_list_set, user: self, date: today)
+      today_plan = List.create(list_set: plan_list_set, user: self, date: today - 1)
       # TODO: fill today plan with instructions, rename it as instructions, walk people through initial planning
     end
 
@@ -60,10 +60,6 @@ class User < ApplicationRecord
     day_to_plan_list = List.create(list_set: plan_list_set, user: self, date: day_to_plan)
     self.plan_list = day_to_plan_list
     self.save
-
-    # TODO: cable ready updates to all clients
-    # TODO: we'll need a planning channel that can update the plan list div
-    # TODO: also update the plan list set through the list set channel
   end
 
   def stop_planning
@@ -72,17 +68,14 @@ class User < ApplicationRecord
       return
     end
 
+    self.plan_list = nil
+    self.save
+
     zone = ActiveSupport::TimeZone.new(time_zone)
     today = zone.now.to_date
     self.plan_list_set.lists.where("date < :today", {today: today}).limit(1).each do |list|
       self.plan_list_set.lists.delete(list)
     end
-
-    self.plan_list = nil
-    self.save
-    # TODO: cable ready updates to all clients
-    # TODO: we'll need a planning channel that can update the plan list div
-    # TODO: also update the plan list set through the list set channel
   end
 
   def gravatar_url

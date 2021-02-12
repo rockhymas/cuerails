@@ -1,4 +1,4 @@
-<%= render layout: 'list_sets/set', locals: { list_set: current_user.current_list_set, title: 'Current Lists' } do %>
+<%= render layout: 'list_sets/set', locals: { list_set: user.current_list_set, title: 'Current Lists' } do %>
   <div class="hover:bg-green-100 text-center">
     <%= link_to t(:new_list), current_new_list_path, method: :post %>
   </div>

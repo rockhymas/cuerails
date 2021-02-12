@@ -6,7 +6,7 @@
     <% end %>
 >
   <% list_set.lists.each do |list| %>
-    <% is_plan_list = list.user.plan_list == list %>
+    <% is_plan_list = list_set.user.plan_list_id == list.id %>
     <div data-list-id="<%= list.id %>" class="hover:bg-green-100 <%= is_plan_list ? 'text-center' : '' %> <%= list == @list ? 'border' : '' %>">
       <% if is_plan_list %>
         <%= content_tag(:span, 'Creating ' + list.name) %>
