@@ -4,7 +4,7 @@
       data-update-name-value="ListSet"
       data-update-id-value="<%=list_set.id%>" >
   <% if local_assigns[:title] %>
-    <div><%=title%></div>
+    <div class="text-center"><%=title%></div>
   <% end %>
   <div id="<%=dom_id(list_set, 'contents')%>">
     <%= render partial: 'list_sets/items', locals: { list_set: list_set } %>
