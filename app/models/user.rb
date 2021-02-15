@@ -9,6 +9,7 @@ class User < ApplicationRecord
   belongs_to :plan_list, class_name: "List", optional: true
   belongs_to :plan_list_set, class_name: "ListSet", optional: true
   belongs_to :current_list_set, class_name: "ListSet", optional: true
+  belongs_to :archive_list_set, class_name: "ListSet", optional: true
 
   def current_day_plan
     zone = ActiveSupport::TimeZone.new(time_zone)
@@ -21,6 +22,16 @@ class User < ApplicationRecord
     if plan_list_set.nil?
       self.plan_list_set = ListSet.create(user: self, user_managed: false)
       self.save
+    end
+
+    if archive_list_set.nil?
+      self.archive_list_set = ListSet.create(user: self, user_managed: true)
+      self.save
+    end
+
+    self.lists.where(list_set_id: nil).each do |list|
+      list.list_set_id = self.archive_list_set.id
+      list.save
     end
 
     if plan_list_set.lists.empty?
@@ -74,7 +85,8 @@ class User < ApplicationRecord
     zone = ActiveSupport::TimeZone.new(time_zone)
     today = zone.now.to_date
     self.plan_list_set.lists.where("date < :today", {today: today}).limit(1).each do |list|
-      self.plan_list_set.lists.delete(list)
+      list.list_set = self.archive_list_set
+      list.save
     end
   end
 

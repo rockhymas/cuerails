@@ -13,5 +13,10 @@ class PlanJob < ApplicationJob
     cable_ready[ListSetChannel]
       .morph(selector: dom_id(user.plan_list_set), html: render(partial: "list_sets/plan_set", locals: { user: user }))
       .broadcast_to(user.plan_list_set)
+
+    cable_ready[ListSetChannel]
+      .morph(selector: dom_id(user.archive_list_set), html: render(partial: "list_sets/archive_set", locals: { user: user }))
+      .broadcast_to(user.archive_list_set)
+
   end
 end
