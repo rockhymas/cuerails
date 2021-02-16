@@ -12,8 +12,7 @@ class List < ApplicationRecord
       return title
     end
 
-    zone = ActiveSupport::TimeZone.new(user.time_zone)
-    today = zone.now.to_date
+    today = user.today
 
     if date == today
       return "Today's Plan"

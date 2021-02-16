@@ -12,9 +12,6 @@ class User < ApplicationRecord
   belongs_to :archive_list_set, class_name: "ListSet", optional: true
 
   def current_day_plan
-    zone = ActiveSupport::TimeZone.new(time_zone)
-    today = zone.now.to_date
-
     self.plan_list_set.lists.where("date <= :today", {today: today}).first
   end
 
@@ -35,8 +32,6 @@ class User < ApplicationRecord
     end
 
     if plan_list_set.lists.empty?
-      zone = ActiveSupport::TimeZone.new(time_zone)
-      today = zone.now.to_date
       today_plan = List.create(list_set: plan_list_set, user: self, date: today - 1)
       # TODO: fill today plan with instructions, rename it as instructions, walk people through initial planning
     end
@@ -48,9 +43,6 @@ class User < ApplicationRecord
   end
 
   def can_plan_day?
-    zone = ActiveSupport::TimeZone.new(time_zone)
-    today = zone.now.to_date
-
     plan_list.nil? && plan_list_set.lists.last.date <= today
   end
 
@@ -60,8 +52,7 @@ class User < ApplicationRecord
       return
     end
 
-    zone = ActiveSupport::TimeZone.new(time_zone)
-    today = zone.now.to_date
+    # day to plan is the day after last day planned, or today, whichever is later
     latest_day_planned = plan_list_set.lists.last.date
     day_to_plan = latest_day_planned + 1
     if (day_to_plan <=> today) == -1
@@ -82,12 +73,15 @@ class User < ApplicationRecord
     self.plan_list = nil
     self.save
 
-    zone = ActiveSupport::TimeZone.new(time_zone)
-    today = zone.now.to_date
     self.plan_list_set.lists.where("date < :today", {today: today}).limit(1).each do |list|
       list.list_set = self.archive_list_set
       list.save
     end
+  end
+
+  def today
+    zone = ActiveSupport::TimeZone.new(time_zone)
+    zone.now.to_date
   end
 
   def gravatar_url
