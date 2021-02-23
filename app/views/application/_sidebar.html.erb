@@ -1,6 +1,8 @@
 <div id="sidebar" class="flex flex-col py-4 space-y-4 w-full">
   <%= render partial: 'list_sets/plan_set', locals: { user: current_user } %>
 
+  <%= render partial: 'list_sets/daily_tickler_set', locals: { user: current_user } %>
+
   <%= render partial: 'list_sets/current_set', locals: { user: current_user } %>
 
   <%= render partial: 'list_sets/archive_set', locals: { user: current_user } %>

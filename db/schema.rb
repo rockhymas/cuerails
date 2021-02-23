@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_15_160746) do
+ActiveRecord::Schema.define(version: 2021_02_17_162919) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -59,8 +59,10 @@ ActiveRecord::Schema.define(version: 2021_02_15_160746) do
     t.bigint "plan_list_set_id"
     t.bigint "current_list_set_id"
     t.bigint "archive_list_set_id"
+    t.bigint "daily_tickler_list_set_id"
     t.index ["archive_list_set_id"], name: "index_users_on_archive_list_set_id"
     t.index ["current_list_set_id"], name: "index_users_on_current_list_set_id"
+    t.index ["daily_tickler_list_set_id"], name: "index_users_on_daily_tickler_list_set_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["plan_list_id"], name: "index_users_on_plan_list_id"
     t.index ["plan_list_set_id"], name: "index_users_on_plan_list_set_id"
@@ -73,6 +75,7 @@ ActiveRecord::Schema.define(version: 2021_02_15_160746) do
   add_foreign_key "todos", "lists"
   add_foreign_key "users", "list_sets", column: "archive_list_set_id"
   add_foreign_key "users", "list_sets", column: "current_list_set_id"
+  add_foreign_key "users", "list_sets", column: "daily_tickler_list_set_id"
   add_foreign_key "users", "list_sets", column: "plan_list_set_id"
   add_foreign_key "users", "lists", column: "plan_list_id"
 end

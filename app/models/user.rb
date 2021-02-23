@@ -6,10 +6,13 @@ class User < ApplicationRecord
 
   has_many :lists
   has_many :list_sets
+
   belongs_to :plan_list, class_name: "List", optional: true
+
   belongs_to :plan_list_set, class_name: "ListSet", optional: true
   belongs_to :current_list_set, class_name: "ListSet", optional: true
   belongs_to :archive_list_set, class_name: "ListSet", optional: true
+  belongs_to :daily_tickler_list_set, class_name: "ListSet", optional: true
 
   def current_day_plan
     self.plan_list_set.lists.where("date <= :today", {today: today}).first
@@ -19,6 +22,21 @@ class User < ApplicationRecord
     if plan_list_set.nil?
       self.plan_list_set = ListSet.create(user: self, user_managed: false)
       self.save
+    end
+
+    if daily_tickler_list_set.nil?
+      self.daily_tickler_list_set = ListSet.create(user: self, user_managed: false)
+      self.save
+    end
+
+    if daily_tickler_list_set.lists.empty?
+      List.create(list_set: daily_tickler_list_set, user: self, title: "Sunday")
+      List.create(list_set: daily_tickler_list_set, user: self, title: "Monday")
+      List.create(list_set: daily_tickler_list_set, user: self, title: "Tuesday")
+      List.create(list_set: daily_tickler_list_set, user: self, title: "Wednesday")
+      List.create(list_set: daily_tickler_list_set, user: self, title: "Thursday")
+      List.create(list_set: daily_tickler_list_set, user: self, title: "Friday")
+      List.create(list_set: daily_tickler_list_set, user: self, title: "Saturday")
     end
 
     if archive_list_set.nil?
