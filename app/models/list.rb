@@ -1,8 +1,10 @@
 class List < ApplicationRecord
-  has_many :todos, -> { order(position: :asc) }
+  has_many :todos, -> { order(position: :asc) }, dependent: :destroy
   belongs_to :user
   belongs_to :list_set, optional: true
   acts_as_list scope: :list_set
+
+  scope :rotate_past, ->(index) { reorder(Arel.sql("mod(position + 6 - %d, 7)" % [index + 1])) }
 
   def name
     if is_name_editable?

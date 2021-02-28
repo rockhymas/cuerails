@@ -20,23 +20,18 @@ class User < ApplicationRecord
 
   def ensure_list_sets
     if plan_list_set.nil?
-      self.plan_list_set = ListSet.create(user: self, user_managed: false)
+      self.plan_list_set = PlanListSet.create(user: self, user_managed: false)
       self.save
     end
 
     if daily_tickler_list_set.nil?
-      self.daily_tickler_list_set = ListSet.create(user: self, user_managed: false)
+      self.daily_tickler_list_set = TicklerListSet.create(user: self, user_managed: false)
       self.save
     end
 
-    if daily_tickler_list_set.lists.empty?
-      List.create(list_set: daily_tickler_list_set, user: self, title: "Sunday")
-      List.create(list_set: daily_tickler_list_set, user: self, title: "Monday")
-      List.create(list_set: daily_tickler_list_set, user: self, title: "Tuesday")
-      List.create(list_set: daily_tickler_list_set, user: self, title: "Wednesday")
-      List.create(list_set: daily_tickler_list_set, user: self, title: "Thursday")
-      List.create(list_set: daily_tickler_list_set, user: self, title: "Friday")
-      List.create(list_set: daily_tickler_list_set, user: self, title: "Saturday")
+    if current_list_set.nil?
+      self.current_list_set = ListSet.create(user: self, user_managed: true)
+      self.save
     end
 
     if archive_list_set.nil?
@@ -47,16 +42,6 @@ class User < ApplicationRecord
     self.lists.where(list_set_id: nil).each do |list|
       list.list_set_id = self.archive_list_set.id
       list.save
-    end
-
-    if plan_list_set.lists.empty?
-      today_plan = List.create(list_set: plan_list_set, user: self, date: today - 1)
-      # TODO: fill today plan with instructions, rename it as instructions, walk people through initial planning
-    end
-
-    if current_list_set.nil?
-      self.current_list_set = ListSet.create(user: self, user_managed: true)
-      self.save
     end
   end
 
