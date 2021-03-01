@@ -4,6 +4,8 @@ class List < ApplicationRecord
   belongs_to :list_set, optional: true
   acts_as_list scope: :list_set
 
+  before_create :ensure_single_todo
+
   scope :rotate_past, ->(index) { reorder(Arel.sql("mod(position + 6 - %d, 7)" % [index + 1])) }
 
   def name
@@ -39,9 +41,11 @@ class List < ApplicationRecord
     date.blank?
   end
 
-  before_create do
+  def ensure_single_todo
     if self.todos.length == 0
       self.todos << Todo.create
+      ListUpdateJob.perform_later self.id
     end
   end
+
 end

@@ -41,8 +41,6 @@ class TodoReflex < ApplicationReflex
 
     todo.destroy
 
-    # TODO: run a check on the list? that will create a new one. Newly created todos update via CR like any other newly created todo
-
     morph :nothing
     cable_ready[ListChannel]
       .remove(selector: todo_selector, exemptId: element.dataset["crap-id-value"])
