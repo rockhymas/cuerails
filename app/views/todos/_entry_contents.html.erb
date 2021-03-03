@@ -2,7 +2,7 @@
   <%= check_box_tag dom_id(todo, "check"), "", todo.complete, class: "appearance-none focus:outline-none focus:ring-green-600 focus:ring-2 h-6 w-6 text-green-600 border-green-100 rounded" + (todo.title.blank? ? "" : " border"), data: { "todo-target": "checkbox", action: "change->todo#complete", "reflex-dataset": "combined" } %>
   <%= text_field_tag dom_id(todo, "title"), todo.title, class: "flex-grow focus:outline-none focus:ring-green-600 focus:ring-2 my-0.5 p-0.5", data: { "todo-target": "title", action: "input->todo#rename keydown->todo#keydown blur->todo#blur keypress->todo#keypress", "reflex-dataset": "combined" } %>
   <%= content_tag :span, class: "handle", data: { "todo-target": "handle", action: "click->todo#clickHandle" } do %>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 297 297" width="24" height="24" class="fill-current text-green-600">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 297 297" width="24" height="24" class="fill-current text-green-100">
       <g>
         <path d="M42.352,106.148C18.999,106.148,0,125.147,0,148.5c0,23.353,18.999,42.352,42.352,42.352
           c23.353,0,42.352-18.999,42.352-42.352C84.704,125.147,65.705,106.148,42.352,106.148z"/>

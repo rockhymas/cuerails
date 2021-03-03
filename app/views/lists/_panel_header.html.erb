@@ -8,6 +8,6 @@
     value="<%= list.is_name_editable? ? list.editable_name : list.name %>"/>
 
   <% if list == list.user.plan_list %>
-    <%= link_to t(:finish_planning), complete_plan_path, class: "bg-green-600 rounded px-3 text-white border-4 border-transparent hover:bg-green-100", method: :post %>
+    <%= link_to t(:finish_planning), complete_plan_path, class: "bg-green-600 rounded px-3 text-white text-center border-4 border-transparent hover:bg-green-100", method: :post %>
   <% end %>
 </div>

@@ -1,9 +1,22 @@
 <div id="sidebar" class="flex flex-col pt-4 space-y-4 w-full">
-  <%= render partial: 'list_sets/plan_set', locals: { user: current_user } %>
+  <% if user_signed_in? %>
 
-  <%= render partial: 'list_sets/daily_tickler_set', locals: { user: current_user } %>
+    <%= render partial: 'list_sets/plan_set', locals: { user: current_user } %>
 
-  <%= render partial: 'list_sets/current_set', locals: { user: current_user } %>
+    <%= render partial: 'list_sets/daily_tickler_set', locals: { user: current_user } %>
 
-  <%= render partial: 'list_sets/archive_set', locals: { user: current_user } %>
+    <%= render partial: 'list_sets/current_set', locals: { user: current_user } %>
+
+    <%= render partial: 'list_sets/archive_set', locals: { user: current_user } %>
+
+  <% elsif false %>
+    <div class="bg-white text-black p-2 border border-green-100 rounded">
+      <div class="hover:bg-green-100 text-center">
+        <%= link_to(t(:log_in), new_user_session_path, class: "block") %>
+      </div>
+      <div class="hover:bg-green-100 text-center">
+        <%= link_to(t(:sign_up), new_user_registration_path, class: "block") %>
+      </div>
+    </div>
+  <% end %>
 </div>
