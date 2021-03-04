@@ -1,5 +1,5 @@
-<div class="bg-white flex-1 rounded space-y-4 pb-2">
-  <div class="flex flex-row text-lg sm:text-2xl px-4 pt-4">
+<div class="bg-white flex-1 rounded space-y-4 pb-2 w-full">
+  <div class="flex flex-row text-xl sm:text-2xl px-4 pt-4 text-center">
     <span class="flex-grow bg-transparent p-1 rounded">
       Log in
     </span>
@@ -7,25 +7,25 @@
 
   <div class="px-4">
     <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-      <div class="field">
+      <div class="field py-1">
         <%= f.label :email %><br />
-        <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "border rounded border-green-600 w-full" %>
       </div>
 
-      <div class="field">
+      <div class="field py-1">
         <%= f.label :password %><br />
-        <%= f.password_field :password, autocomplete: "current-password" %>
+        <%= f.password_field :password, autocomplete: "current-password", class: "border rounded border-green-600 w-full" %>
       </div>
 
       <% if devise_mapping.rememberable? %>
-        <div class="field">
+        <div class="field py-1">
           <%= f.check_box :remember_me %>
           <%= f.label :remember_me %>
         </div>
       <% end %>
 
-      <div class="actions">
-        <%= f.submit "Log in" %>
+      <div class="actions py-1">
+        <%= f.submit "Log in", class: "bg-green-600 rounded px-3 w-full text-white text-center border-4 border-transparent hover:bg-green-100" %>
       </div>
     <% end %>
 
