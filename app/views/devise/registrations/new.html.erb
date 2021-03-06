@@ -29,7 +29,7 @@
 
       <div class="field py-1">
         <%= f.label :time_zone %><br />
-        <%= f.select :time_zone, time_zone_options_for_select(f.object.time_zone, nil, ActiveSupport::TimeZone), {}, { class: "max-w-full" } %>
+        <%= f.select :time_zone, time_zone_options_for_select(f.object.time_zone, nil, ActiveSupport::TimeZone), {}, { class: "border rounded border-green-600 w-full max-w-full" } %>
       </div>
 
       <div class="actions py-1">
